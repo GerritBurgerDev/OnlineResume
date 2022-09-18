@@ -41,7 +41,11 @@ func GetSingleDocument(client *mongo.Client, dbName string, coll string, key str
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return bson.M{"Error": "Not found"}
+			return bson.M{
+				"Message":    "The document you are looking for could not be found",
+				"Error":      err,
+				"StatusCode": 404,
+			}
 		}
 		panic(err)
 	}

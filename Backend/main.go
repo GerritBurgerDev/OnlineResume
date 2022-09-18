@@ -14,10 +14,8 @@ import (
 var client *mongo.Client
 var ctx context.Context
 
-/*
-handleRequests listens for http requests and redirect to the function
-responsible for handling this route/request.
-*/
+// handleRequests listens for http requests and redirect to the function
+// responsible for handling this route/request.
 func handleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", RootCall).Methods("GET")
@@ -44,9 +42,7 @@ func connectDatabase() (*mongo.Client, context.Context) {
 	return getClient, ctx
 }
 
-/*
-main calls handleRequests which listens and routes all requests.
-*/
+// main calls handleRequests which listens and routes all requests.
 func main() {
 	client, ctx = connectDatabase()
 	defer client.Disconnect(ctx)
