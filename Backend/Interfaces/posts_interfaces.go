@@ -1,3 +1,7 @@
 package Interfaces
 
-// TODO: Fill later.
+import "Backend/Structs"
+
+type Document interface {
+	Structs.Recommendation | Structs.Comment
+}

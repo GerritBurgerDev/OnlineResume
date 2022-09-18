@@ -11,9 +11,11 @@ type Comment struct {
 
 // Recommendation - The struct for the Recommendation type.
 type Recommendation struct {
-	Id        int
-	Author    string
-	Content   string
-	Rating    float64
-	Timestamp int
+	Id                int     `bson:"Id"`
+	Author            string  `bson:"Author"`
+	Relationship      string  `bson:"Relationship"`
+	PositionAtTheTime string  `bson:"PositionAtTheTime"`
+	Content           string  `bson:"Content"`
+	Rating            float64 `bson:"Rating"`
+	Timestamp         int     `bson:"Timestamp"`
 }

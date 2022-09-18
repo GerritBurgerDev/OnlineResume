@@ -1,6 +1,7 @@
 package Helpers
 
 import (
+	"Backend/Interfaces"
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -46,4 +47,23 @@ func GetSingleDocument(client *mongo.Client, dbName string, coll string, key str
 	}
 
 	return result
+}
+
+// AddSingleDocument inserts a single document into a collection in a specified database
+// client - the global mongoDB client
+// dbName - the name of the database where the collection lives
+// coll - the name of the collection you are trying to grab
+// doc - the document being added into the collection
+// returns status object containing a StatusCode and a Message (possibly even an Error)
+func AddSingleDocument[Document Interfaces.Document](collection *mongo.Collection, doc Document) bson.M {
+	_, err := collection.InsertOne(context.TODO(), doc)
+	if err != nil {
+		return bson.M{
+			"Message":    "Could not create your recommendation, please try again.",
+			"Error":      err,
+			"StatusCode": 500,
+		}
+	}
+
+	return bson.M{"Message": "Successfully added recommendation", "StatusCode": 200}
 }

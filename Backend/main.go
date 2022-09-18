@@ -21,8 +21,9 @@ responsible for handling this route/request.
 func handleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", RootCall).Methods("GET")
-	router.HandleFunc("/comments", GetAllComments).Methods("GET")
-	router.HandleFunc("/comment/{id}", GetComment).Methods("GET")
+	router.HandleFunc("/comments", GetAllRecommendations).Methods("GET")
+	router.HandleFunc("/comments", AddRecommendation).Methods("POST")
+	router.HandleFunc("/comment/{id}", GetRecommendation).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8081", router))
 }
 
