@@ -1,5 +1,5 @@
 # Output of the air library
-/tmp
+tmp/
 *.toml
 
 # Binaries for programs and plugins
