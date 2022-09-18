@@ -1,3 +1,5 @@
+.idea/
+
 # Output of the air library
 tmp/
 *.toml
