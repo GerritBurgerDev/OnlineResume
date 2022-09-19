@@ -18,7 +18,7 @@ function App() {
     },
     {
       path: "/about-me",
-      element: <div>Some test</div>
+      element: <div>Some test 2</div>
     }
   ])
 
