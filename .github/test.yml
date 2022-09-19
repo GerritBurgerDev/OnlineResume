@@ -9,3 +9,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: github/checkout@v3
+
+      - name: Run Super-Linter
+        uses: github/super-linter@v3
+        env:
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
