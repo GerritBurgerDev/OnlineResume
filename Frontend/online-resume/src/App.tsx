@@ -7,19 +7,27 @@ import './App.scss'
 import './components/navbar/navbar';
 import Navbar from "./components/navbar/navbar";
 import Home from "./pages/home";
+import ErrorPage from "./pages/error-page";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home />
+      element: <Home />,
+      errorElement: <ErrorPage />
+    },
+    {
+      path: "/about-me",
+      element: <div>sddsfdsf</div>
     }
   ])
 
   return (
-    <div className="App">
+    <div className="app-container">
       <Navbar />
-      <RouterProvider router={router} />
+      <div className="page-content">
+        <RouterProvider router={router} />
+      </div>
     </div>
   )
 }
