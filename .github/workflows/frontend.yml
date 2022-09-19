@@ -50,4 +50,4 @@ jobs:
         run: cat $HOME/files.json
 
       - name: Test changed files
-        run: npm run test:changedsince
+        run: cd Frontend/online-resume && npm run test:changedsince
