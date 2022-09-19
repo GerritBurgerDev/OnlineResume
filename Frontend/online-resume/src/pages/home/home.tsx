@@ -1,3 +1,4 @@
+import React from 'react';
 import "./home.scss";
 import companyLogo from "../../assets/images/company-logo.png";
 import IconCard from "@/components/icon-card/icon-card";
