@@ -44,8 +44,6 @@ jobs:
       - name: Run eslint on changed files
         uses: tj-actions/eslint-changed-files@v14
         with:
-          config_path: "/Frontend/online-resume/.eslintrc"
-          ignore_path: "/Frontend/online-resume/.eslintignore"
           extra_args: "--max-warnings=0"
           file_extensions: |
             **/*.ts
