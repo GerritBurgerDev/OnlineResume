@@ -48,13 +48,20 @@ const Home = () => {
                         </div>
 
                         <div className="stack-section">
-                            <h2>Technologies</h2>
+                            <div className="left-section">
+                                <h2>Technologies</h2>
 
-                            <div className="technologies-container">
-                                <IconCard icon="go" isCustom size={45}/>
-                                <IconCard icon="react" isCustom size={45}/>
-                                <IconCard icon="aws" isCustom size={45}/>
-                                <IconCard icon="mongodb" isCustom size={45}/>
+                                <div className="technologies-container">
+                                    <IconCard icon="go" isCustom size={45}/>
+                                    <IconCard icon="react" isCustom size={45}/>
+                                    <IconCard icon="aws" isCustom size={45}/>
+                                    <IconCard icon="mongodb" isCustom size={45}/>
+                                </div>
+                            </div>
+
+                            <div className="right-section">
+                                <h2>0 Years</h2>
+                                <h2>0 Months</h2>
                             </div>
                         </div>
                     </div>
