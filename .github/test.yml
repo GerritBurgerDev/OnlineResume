@@ -1,0 +1,11 @@
+name: Test Actions
+
+on: push
+
+jobs:
+  test:
+    name: Test Github Actions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: github/checkout@v3
