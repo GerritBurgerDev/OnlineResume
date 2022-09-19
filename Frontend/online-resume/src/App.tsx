@@ -6,7 +6,7 @@ import {
 import './App.scss'
 import './components/navbar/navbar';
 import Navbar from "./components/navbar/navbar";
-import Home from "./pages/home";
+import Home from "./pages/home/home";
 import ErrorPage from "./pages/error-page";
 
 function App() {

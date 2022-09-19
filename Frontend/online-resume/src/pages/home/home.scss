@@ -1,0 +1,76 @@
+@import "../../assets/css/colors";
+
+.home-page {
+  .top-section {
+    display: flex;
+    justify-content: space-between;
+
+    .my-bio {
+      flex-basis: 60%;
+      background: rgba(white, 0.5);
+    }
+
+    .current-employment {
+      &-container {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+      }
+
+      width: 500px;
+      padding: 20px;
+      background: $dark-color;
+      box-shadow: 0 1px 10px 5px rgba(black, 0.3);
+      border-radius: 5px;
+
+      .title-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .left-section {
+          h2 {
+            margin: 0;
+          }
+
+          .position {
+            display: flex;
+            align-items: center;
+            column-gap: 10px;
+
+            &-text {
+              font-size: 1.1rem;
+            }
+          }
+        }
+
+        .right-section {
+          text-align: center;
+          width: 150px;
+          height: 100px;
+
+          img {
+            object-fit: contain;
+            height: 100%;
+            border-radius: 10px;
+          }
+        }
+      }
+
+      .stack-section {
+        .technologies-container {
+          display: flex;
+          column-gap: 20px;
+
+          .icon-card {
+            transition: .2s ease-in-out;
+
+            &:hover {
+              transform: scale(1.2);
+            }
+          }
+        }
+      }
+    }
+  }
+}
