@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:changedsince": "jest --changedSince=master --coverage"
+    "test:changedsince": "jest --changedSince=master"
   },
   "dependencies": {
     "react": "^18.2.0",
