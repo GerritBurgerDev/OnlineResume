@@ -39,15 +39,17 @@ jobs:
 
 
       - name: Install
-        run: cd Frontend/online-resume && npm install
+        run: cd Frontend/online-resume && npm ci
 
-      - name: Gather files changed
-        uses: trilom/file-changes-action@a6ca26c14274c33b15e6499323aac178af06ad4b
+      - name: Run eslint on changed files
+        uses: tj-actions/eslint-changed-files@v14
         with:
-          fileOutput: 'json'
+          config_path: "/Frontend/online-resume/.eslintrc"
+          ignore_path: "/Frontend/online-resume/.eslintignore"
+          extra_args: "--max-warnings=0"
+          file_extensions: |
+            **/*.ts
+            **/*.tsx
 
-      - name: Show files changed
-        run: cat $HOME/files.json
-
-      - name: Test changed files
-        run: cd Frontend/online-resume && npm run test:changedsince
+      - name: Test files
+        run: cd Frontend/online-resume && npm run test
