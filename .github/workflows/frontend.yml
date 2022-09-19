@@ -41,13 +41,8 @@ jobs:
       - name: Install
         run: cd Frontend/online-resume && npm ci
 
-      - name: Run eslint on changed files
-        uses: tj-actions/eslint-changed-files@v14
-        with:
-          extra_args: "--max-warnings=0"
-          file_extensions: |
-            **/*.ts
-            **/*.tsx
+      - name: Run linting
+        run: cd Frontend/online-resume && npm run lint:scripts
 
       - name: Test files
         run: cd Frontend/online-resume && npm run test
