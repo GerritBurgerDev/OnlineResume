@@ -5,8 +5,9 @@ import React from "react";
 
 type IconCardProps = {
     icon: string,
-    isCustom: boolean,
-    size: number
+    isCustom?: boolean,
+    size: number,
+    color?: string
 }
 
 const IconCard = (props: IconCardProps) => {
@@ -25,7 +26,7 @@ const IconCard = (props: IconCardProps) => {
         }
 
         return (
-            <Icon>{props.icon}</Icon>
+            <Icon sx={{ fontSize: props.size, color: props.color }}>{props.icon}</Icon>
         )
     }
 
@@ -37,7 +38,8 @@ const IconCard = (props: IconCardProps) => {
 }
 
 IconCard.defaultProps = {
-    size: 64
+    size: 64,
+    color: 'white'
 }
 
 export default IconCard;
