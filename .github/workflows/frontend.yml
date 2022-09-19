@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Setup node
         uses: actions/setup-node@v3
@@ -29,7 +31,9 @@ jobs:
           cache: npm
 
       - name: Install
-        run: npm install
+        run: |
+          git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
+          npm install
 
       - name: Gather files changed
         uses: trilom/file-changes-action@a6ca26c14274c33b15e6499323aac178af06ad4b
