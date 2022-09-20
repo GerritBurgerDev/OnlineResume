@@ -111,6 +111,13 @@ const Home = () => {
                         ) : null }
                     </h1>
                     <h3 data-test="selected-skill">( {selectedSkill.name} )</h3>
+                    {
+                        selectedSkill.name !== 'All' && (
+                            <h3 className="show-all-skills" onClick={() => setSelectedSkill(SELECTED_SKILL_ALL)}>
+                                Show all skills
+                            </h3>
+                        )
+                    }
                 </div>
 
                 <div className="content-container">

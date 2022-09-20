@@ -157,6 +157,16 @@
       h3 {
         color: $subtle-color;
       }
+
+      .show-all-skills {
+        font-weight: 200;
+        color: $blue-color;
+
+        &:hover {
+          cursor: pointer;
+          color: $blue-color-light;
+        }
+      }
     }
 
     .tech-table {
