@@ -110,7 +110,7 @@ const Home = () => {
                             </Tooltip>
                         ) : null }
                     </h1>
-                    <h3>( {selectedSkill.name} )</h3>
+                    <h3 data-test="selected-skill">( {selectedSkill.name} )</h3>
                 </div>
 
                 <div className="content-container">
@@ -126,7 +126,7 @@ const Home = () => {
                             Object.values(ALL_SKILLS).map((skill: TechSkill) => {
                                 return (
                                     <tr key={skill.name}>
-                                        <td onClick={ () => selectSkill(skill.icon) }>
+                                        <td data-test="tech-skill" onClick={ () => selectSkill(skill.icon) }>
                                             <IconCard icon={skill.icon} isCustom size={32}/>
                                             <span>{skill.name}</span>
                                         </td>

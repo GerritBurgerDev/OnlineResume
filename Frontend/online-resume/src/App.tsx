@@ -4,10 +4,9 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './App.scss'
-import './components/navbar/navbar';
-import Navbar from "./components/navbar/navbar";
-import Home from "./pages/home/home";
-import ErrorPage from "./pages/error-page";
+import Navbar from "@/components/navbar/navbar";
+import Home from "@/pages/home/home";
+import ErrorPage from "@/pages/error-page";
 
 function App() {
   const router = createBrowserRouter([
