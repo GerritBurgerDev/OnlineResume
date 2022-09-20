@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React, {SyntheticEvent, useState} from 'react';
 import "./home.scss";
 import myAvatar from "@/assets/images/my-avatar.jpeg";
 import companyLogo from "@/assets/images/company-logo.png";
 import IconCard from "@/components/icon-card/icon-card";
-import {Tooltip, Icon} from "@mui/material";
+import {Tooltip, Icon, Rating} from "@mui/material";
 import {green, orange} from "@mui/material/colors";
 import {TechSkill} from "@/interfaces/global-interfaces";
 import {ALL_SKILLS, SELECTED_SKILL_ALL} from "@/constants/global-constants";
-import {Project} from "@/interfaces/project-interfaces";
 
 const Home = () => {
     const [selectedSkill, setSelectedSkill] = useState<TechSkill>(SELECTED_SKILL_ALL);
+    const [ratingVal, setRatingVal] = useState<number | null>(2.5);
 
     const selectSkill = (name: string) => {
         setSelectedSkill(ALL_SKILLS[name]);
@@ -120,6 +120,7 @@ const Home = () => {
                             <th>Type</th>
                             <th>Projects</th>
                             <th>Experience</th>
+                            <th>Confidence</th>
                         </tr>
                         {
                             Object.values(ALL_SKILLS).map((skill: TechSkill) => {
@@ -143,6 +144,16 @@ const Home = () => {
                                             }
                                         </td>
                                         <td>{skill.experienceDuration}</td>
+                                        <td>
+                                            <Rating
+                                                name="simple-controlled"
+                                                value={ratingVal}
+                                                onChange={(event: SyntheticEvent, newValue: number | null) => {
+                                                    setRatingVal(newValue);
+                                                }}
+                                                precision={0.5}
+                                            />
+                                        </td>
                                     </tr>
                                 )
                             })
