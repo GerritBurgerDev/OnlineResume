@@ -2,9 +2,10 @@ import React from 'react';
 import {shallow, ShallowWrapper} from 'enzyme';
 import Home from './home';
 import {ALL_SKILLS, SELECTED_SKILL_ALL, SKILL_PHP} from '@/constants/global-constants';
+import {getElementById} from "@/helpers/testing-helpers";
 
 describe('Home Page Tests', () => {
-    let component: ShallowWrapper<any> | null = null;
+    let component: ShallowWrapper | null = null;
 
     beforeEach(() => {
         component = shallow(<Home />);
@@ -16,13 +17,13 @@ describe('Home Page Tests', () => {
 
     describe('When the user selects the PhP tech skill', () => {
         it('should have the default selected before the selection',  () => {
-            expect(component?.find('[data-test="selected-skill"]').text()).toBe(`( ${SELECTED_SKILL_ALL.name} )`);
+            expect(getElementById(component, 'selected-skill')?.text()).toBe(`( ${SELECTED_SKILL_ALL.name} )`);
         });
 
         it('should set the selectedSkill correctly',  () => {
-            component?.find('[data-test="tech-skill"]').at(1).simulate('click');
+            getElementById(component, 'tech-skill')?.at(1).simulate('click');
 
-            expect(component?.find('[data-test="selected-skill"]').text()).toBe(`( ${ALL_SKILLS[SKILL_PHP].name} )`);
+            expect(getElementById(component, 'selected-skill')?.text()).toBe(`( ${ALL_SKILLS[SKILL_PHP].name} )`);
         });
     });
 });
