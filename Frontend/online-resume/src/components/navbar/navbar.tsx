@@ -19,7 +19,7 @@ const Navbar = () => {
                     <a href="/about-me">About Me</a>
                     <a href="/education">Education</a>
                     <a href="/experience">Experience</a>
-                    <a href="/personal-projects">Personal Projects</a>
+                    <a href="/projects">Projects</a>
                     <a href="/contact-me">Contact Me</a>
                 </div>
 

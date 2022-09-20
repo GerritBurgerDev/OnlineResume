@@ -31,13 +31,13 @@
       }
     }
 
-    @media (max-width: 750px) {
+    @media (max-width: 800px) {
       display: none;
     }
   }
 
   .right-elements {
-    @media (max-width: 750px) {
+    @media (max-width: 800px) {
       flex: 1;
 
       > * {
