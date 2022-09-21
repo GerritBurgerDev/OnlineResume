@@ -16,9 +16,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="center-elements">
-                    <a href="/about-me">About Me</a>
                     <a href="/education">Education</a>
-                    <a href="/experience">Experience</a>
                     <a href="/projects">Projects</a>
                     <a href="/contact-me">Contact Me</a>
                 </div>
