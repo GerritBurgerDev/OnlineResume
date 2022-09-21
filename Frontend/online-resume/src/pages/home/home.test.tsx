@@ -1,13 +1,40 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import Home from './home';
 import {ALL_SKILLS, SELECTED_SKILL_ALL, SKILL_PHP} from '@/constants/global-constants';
 import {HomeCo} from "@/helpers/component-objects/home-co";
+import {GlobalClient} from "../../helpers/services/global.service";
 
 describe('Home Page Tests', () => {
     let HomeComponent: HomeCo;
+    let service;
 
     beforeAll(() => {
+        service = new GlobalClient();
+
+        jest.spyOn(service, 'getCommonData').mockReturnValue(new Promise(function (resolve, reject) {
+            resolve({
+                techSkills: [
+                    {
+                        "icon": "go",
+                        "name": "Go",
+                        "type": "Backend",
+                        "projects": ["OnlineResume", "Andile Project"],
+                        "experienceDuration": "1 Month",
+                        "confidence": 0
+                    },
+                    {
+                        "icon": "php",
+                        "name": "PhP",
+                        "type": "Backend",
+                        "projects": ["Activate", "Walmart Creator Portal"],
+                        "experienceDuration": "8 Months",
+                        "confidence": 0
+                    }
+                ]
+            })
+        }));
+
         const component = shallow(<Home />);
         HomeComponent = new HomeCo(component);
     });

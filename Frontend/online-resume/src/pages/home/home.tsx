@@ -7,7 +7,7 @@ import {Tooltip, Icon, Rating} from "@mui/material";
 import {green, orange} from "@mui/material/colors";
 import {TechSkill} from "@/interfaces/global-interfaces";
 import {ALL_SKILLS, SELECTED_SKILL_ALL} from "@/constants/global-constants";
-import {GlobalClient} from "@/services/global.service";
+import {GlobalClient} from "@/helpers/services/global.service";
 
 const Home = () => {
     const [selectedSkill, setSelectedSkill] = useState<TechSkill>(SELECTED_SKILL_ALL);
