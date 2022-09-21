@@ -1,4 +1,5 @@
 import React from 'react';
+import '@/helpers/axios-interceptor';
 import {
   createBrowserRouter,
   RouterProvider,

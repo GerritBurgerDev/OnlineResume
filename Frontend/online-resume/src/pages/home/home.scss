@@ -206,6 +206,14 @@
           padding-bottom: 20px;
         }
 
+        .tech-skill {
+          transition: .2s ease-in-out;
+
+          &:hover {
+            transform: scale(1.2);
+          }
+        }
+
         td:first-child {
           width: fit-content;
           display: flex;
