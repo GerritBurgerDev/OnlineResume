@@ -52,6 +52,12 @@ func AddRecommendation(writer http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(writer).Encode(result)
 }
 
+func GetCommonData(writer http.ResponseWriter, request *http.Request) {
+	result := Helpers.GetEntireCollection(client, "OnlineResume", "GlobalData")
+
+	json.NewEncoder(writer).Encode(result[0])
+}
+
 // RootCall is a GET method
 // returns a string.
 func RootCall(writer http.ResponseWriter, request *http.Request) {
