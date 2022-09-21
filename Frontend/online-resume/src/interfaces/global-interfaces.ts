@@ -3,5 +3,6 @@ export type TechSkill = {
     name: string,
     type: string,
     projects: string[],
-    experienceDuration: string
+    experienceDuration: string,
+    confidence: number
 }
