@@ -1,0 +1,31 @@
+@import "@/assets/css/colors";
+
+.error-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .not-found {
+    display: flex;
+    font-size: 100px;
+
+    div {
+      color: $red-color-dark;
+
+      &:last-of-type {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .sniff {
+    display: flex;
+    column-gap: 10px;
+  }
+
+  .reason {
+    font-size: 1.5em;
+  }
+}

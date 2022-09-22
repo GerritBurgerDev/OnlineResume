@@ -1,0 +1,68 @@
+@import "./animations/fade-animations";
+@import "./animations/bounce-animations";
+@import "./animations/shake-animations";
+
+// The specific times that the animation can run
+$times: (
+  "0_5s": 0.5s,
+  "1s": 1s,
+  "1_5s": 1.5s,
+  "2s": 2s,
+  "2_5s": 2.5s,
+  "3s": 3s,
+  "3_5s": 3.5s,
+  "4s": 4s,
+  "4_5s": 4.5s,
+  "5s": 5s,
+);
+
+$bounces: (
+  "once": 1,
+  "twice": 3,
+  "three": 5
+);
+
+@each $timename, $time in $times {
+  .fade-in--#{$timename} {
+    animation: fadeIn ease $time;
+    -webkit-animation: fadeIn ease $time;
+    -moz-animation: fadeIn ease $time;
+    -o-animation: fadeIn ease $time;
+    -ms-animation: fadeIn ease $time;
+  }
+}
+
+@each $timename, $time in $times {
+  .fade-out--#{$timename} {
+    animation: fadeOut ease $time;
+    -webkit-animation: fadeOut ease $time;
+    -moz-animation: fadeOut ease $time;
+    -o-animation: fadeOut ease $time;
+    -ms-animation: fadeOut ease $time;
+  }
+}
+
+@each $bouncename, $numbounce in $bounces {
+  .bounce--#{$bouncename} {
+    animation: bounce 0.5s;
+    animation-direction: alternate;
+    animation-timing-function: cubic-bezier(.5, 0.05, 1, .5);
+    animation-iteration-count: $numbounce;
+    -webkit-animation-name: bounce;
+    -webkit-animation-duration: 0.5s;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-timing-function: cubic-bezier(
+                    .5, 0.05, 1, .5);
+    -webkit-animation-iteration-count: $numbounce;
+  }
+}
+
+@each $timename, $time in $times {
+  .shake--#{$timename} {
+    animation: shake ease $time;
+    -webkit-animation: shake ease $time;
+    -moz-animation: shake ease $time;
+    -o-animation: shake ease $time;
+    -ms-animation: shake ease $time;
+  }
+}

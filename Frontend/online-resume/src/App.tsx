@@ -7,14 +7,14 @@ import {
 import './App.scss'
 import Navbar from "@/components/navbar/navbar";
 import Home from "@/pages/home/home";
-import ErrorPage from "@/pages/error-page";
+import Error from "@/pages/error/error";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Home />,
-      errorElement: <ErrorPage />
+      errorElement: <Error />
     },
     {
       path: "/about-me",
