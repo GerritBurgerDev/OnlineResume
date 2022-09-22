@@ -1,5 +1,7 @@
 export interface ICommonData {
-    techSkills: TechSkill[]
+    techSkills: {
+        [key: string]: TechSkill
+    }
 }
 
 export interface TechSkill {

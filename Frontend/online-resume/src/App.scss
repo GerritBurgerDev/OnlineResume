@@ -1,5 +1,10 @@
 .app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
   .page-content {
+    flex: 1;
     max-width: 1400px;
     margin: 20px auto;
 
