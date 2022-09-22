@@ -5,6 +5,5 @@ export interface ApiConfig {
 }
 
 export interface IGlobalClient {
-    updateAuthToken(token: string): void;
     getCommonData(): Promise<ICommonData | undefined>
 }
