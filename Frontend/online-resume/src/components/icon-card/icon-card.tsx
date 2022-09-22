@@ -7,18 +7,19 @@ type IconCardProps = {
     icon: string,
     isCustom?: boolean,
     size: number,
-    color?: string
+    color?: string,
+    onCardClick?: (name: string) => void,
 }
 
 const IconCard = (props: IconCardProps) => {
-    const getElementStyle: () => React.CSSProperties = () => {
+    const getElementStyle = (): React.CSSProperties => {
         return {
             width: `${props.size}px`,
             height: `${props.size}px`,
         }
     }
 
-    const getIcon: () => (JSX.Element) = () => {
+    const getIcon = (): JSX.Element => {
         if (props.isCustom) {
             return (
                 <img src={`/svgs/${props.icon}.svg`} alt={`${props.icon}-icon`}/>
@@ -30,8 +31,14 @@ const IconCard = (props: IconCardProps) => {
         )
     }
 
+    const onCardClick = () => {
+        if (props.onCardClick) {
+            props.onCardClick(props.icon);
+        }
+    }
+
     return (
-        <div className="icon-card" style={getElementStyle()}>
+        <div className="icon-card" style={getElementStyle()} onClick={() => onCardClick()}>
             {getIcon()}
         </div>
     )

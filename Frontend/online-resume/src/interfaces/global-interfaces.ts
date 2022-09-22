@@ -1,3 +1,7 @@
+export interface ICommonData {
+    techSkills: TechSkill[]
+}
+
 export interface TechSkill {
     icon: string,
     name: string,

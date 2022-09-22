@@ -44,5 +44,6 @@ jobs:
       - name: Run linting
         run: cd Frontend/online-resume && npm run lint:scripts
 
-      - name: Test files
-        run: cd Frontend/online-resume && npm run test
+# TODO: Reactivate once react testing lib has been implemented
+#      - name: Test files
+#        run: cd Frontend/online-resume && npm run test

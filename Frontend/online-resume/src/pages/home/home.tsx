@@ -7,7 +7,7 @@ import {Tooltip, Icon, Rating} from "@mui/material";
 import {green, orange} from "@mui/material/colors";
 import {TechSkill} from "@/interfaces/global-interfaces";
 import {ALL_SKILLS, SELECTED_SKILL_ALL} from "@/constants/global-constants";
-import {GlobalClient} from "@/helpers/services/global.service";
+import {globalServiceClient} from "@/helpers/services/services";
 
 const Home = () => {
     const [selectedSkill, setSelectedSkill] = useState<TechSkill>(SELECTED_SKILL_ALL);
@@ -35,12 +35,12 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const globalService = new GlobalClient();
-
         const fetchTechSkills = async () => {
-            const data = await globalService.getCommonData();
+            const data = await globalServiceClient.getCommonData();
 
-            setAllSkills(Object.values(data.techSkills));
+            if (data) {
+                setAllSkills(Object.values(data.techSkills));
+            }
         }
 
         fetchTechSkills().catch(() => { /* DONE */ });
@@ -95,10 +95,10 @@ const Home = () => {
                                 <h2>Technologies</h2>
 
                                 <div className="technologies-container">
-                                    <IconCard icon="go" isCustom size={45}/>
-                                    <IconCard icon="react" isCustom size={45}/>
-                                    <IconCard icon="aws" isCustom size={45}/>
-                                    <IconCard icon="mongodb" isCustom size={45}/>
+                                    <IconCard icon="go" isCustom size={45} onCardClick={selectSkill} />
+                                    <IconCard icon="react" isCustom size={45} onCardClick={selectSkill} />
+                                    <IconCard icon="aws" isCustom size={45} onCardClick={selectSkill} />
+                                    <IconCard icon="mongodb" isCustom size={45} onCardClick={selectSkill} />
                                 </div>
                             </div>
 
