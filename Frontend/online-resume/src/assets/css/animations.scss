@@ -22,6 +22,14 @@ $bounces: (
   "three": 5
 );
 
+$shakes: (
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+);
+
 @each $timename, $time in $times {
   .fade-in--#{$timename} {
     animation: fadeIn ease $time;
@@ -57,12 +65,13 @@ $bounces: (
   }
 }
 
-@each $timename, $time in $times {
-  .shake--#{$timename} {
-    animation: shake ease $time;
-    -webkit-animation: shake ease $time;
-    -moz-animation: shake ease $time;
-    -o-animation: shake ease $time;
-    -ms-animation: shake ease $time;
+@each $shakekey, $times in $shakes {
+  .shake--#{$shakekey} {
+    animation: shake 1s;
+    animation-iteration-count: $times;
+    -webkit-animation: shake 1s;
+    -webkit-animation-iteration-count: $times;
+    -moz-animation: shake 1s;
+    -moz-animation-iteration-count: $times;
   }
 }

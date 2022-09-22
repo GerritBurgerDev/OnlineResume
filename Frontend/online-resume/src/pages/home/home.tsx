@@ -8,44 +8,92 @@ import {Tooltip, Icon, Rating, Button} from "@mui/material";
 import {green, orange} from "@mui/material/colors";
 import {TechSkill} from "@/interfaces/global-interfaces";
 import {ALL_SKILLS, SELECTED_SKILL_ALL} from "@/constants/global-constants";
-import {globalServiceClient} from "@/helpers/services/services";
+import {useCommonStore} from "@/stores/common-store";
+import {jsx} from "@emotion/react";
+import JSX = jsx.JSX;
 
 const Home = () => {
+    const { commonDataLoading, techSkills, getCommonData } = useCommonStore((state) => state);
+
     const [selectedSkill, setSelectedSkill] = useState<TechSkill>(SELECTED_SKILL_ALL);
-    const [allSkills, setAllSkills] = useState<TechSkill[]>([]);
+    // const [allSkills, setAllSkills] = useState<TechSkill[]>([]);
 
     const selectSkill = (name: string) => {
         setSelectedSkill(ALL_SKILLS[name]);
     };
 
-    const updateSkill = (name: string, key: string, value: string | number | null ) => {
-        const updatedSkills: TechSkill[] = [
-            ...allSkills
-        ];
-
-        const skillIndex = updatedSkills.findIndex((skill: TechSkill) => skill.name === name);
-
-        if (skillIndex > -1) {
-            updatedSkills[skillIndex] = {
-                ...updatedSkills[skillIndex],
-                [key]: value
-            };
-        }
-
-        setAllSkills(updatedSkills);
-    };
+    // const updateSkill = (name: string, key: string, value: string | number | null ) => {
+    //     const updatedSkills: TechSkill[] = [
+    //         ...allSkills
+    //     ];
+    //
+    //     const skillIndex = updatedSkills.findIndex((skill: TechSkill) => skill.name === name);
+    //
+    //     if (skillIndex > -1) {
+    //         updatedSkills[skillIndex] = {
+    //             ...updatedSkills[skillIndex],
+    //             [key]: value
+    //         };
+    //     }
+    //
+    //     setAllSkills(updatedSkills);
+    // };
 
     useEffect(() => {
-        const fetchTechSkills = async () => {
-            const data = await globalServiceClient.getCommonData();
-
-            if (data) {
-                setAllSkills(Object.values(data.techSkills));
-            }
+        const fetchCommonData = async () => {
+            await getCommonData();
         }
 
-        fetchTechSkills().catch(() => { /* DONE */ });
+        fetchCommonData().catch(() => { /* DONE */ });
     }, []);
+
+    const renderTechSkills = (): JSX.Element[] | JSX.Element => {
+        return (
+            !commonDataLoading ? techSkills.map((skill: TechSkill) => {
+                return (
+                    <tr key={skill.name}>
+                        <td className="tech-skill" data-test="tech-skill" onClick={ () => selectSkill(skill.icon) }>
+                            <IconCard icon={skill.icon} isCustom size={32}/>
+                            <span>{skill.name}</span>
+                        </td>
+                        <td>{skill.type}</td>
+                        <td>
+                            {
+                                skill.projects.map((project: string, index: number) => {
+                                    return (
+                                        <span key={project}>
+                                                                {project}
+                                            {index !== skill.projects.length - 1 && ', '}
+                                                            </span>
+                                    )
+                                })
+                            }
+                        </td>
+                        <td>{skill.experienceDuration}</td>
+                        <td>
+                            <Rating
+                                name="simple-controlled"
+                                value={skill.confidence}
+                                onChange={(event: SyntheticEvent, newValue: number | null) => {
+                                    // updateSkill(skill.name, 'confidence', newValue)
+                                }}
+                                precision={0.5}
+                                readOnly
+                            />
+                        </td>
+                    </tr>
+                )
+            }) : (
+                <tr className="loading-row">
+                    <td colSpan={5}>
+                        <div className="loading-container">
+                            Loading...
+                        </div>
+                    </td>
+                </tr>
+            )
+        );
+    }
 
     return (
         <div className="home-page">
@@ -177,40 +225,7 @@ const Home = () => {
                                 <th>Confidence</th>
                             </tr>
                             {
-                                allSkills.map((skill: TechSkill) => {
-                                    return (
-                                        <tr key={skill.name}>
-                                            <td className="tech-skill" data-test="tech-skill" onClick={ () => selectSkill(skill.icon) }>
-                                                <IconCard icon={skill.icon} isCustom size={32}/>
-                                                <span>{skill.name}</span>
-                                            </td>
-                                            <td>{skill.type}</td>
-                                            <td>
-                                                {
-                                                    skill.projects.map((project: string, index: number) => {
-                                                        return (
-                                                            <span key={project}>
-                                                                {project}
-                                                                {index !== skill.projects.length - 1 && ', '}
-                                                            </span>
-                                                        )
-                                                    })
-                                                }
-                                            </td>
-                                            <td>{skill.experienceDuration}</td>
-                                            <td>
-                                                <Rating
-                                                    name="simple-controlled"
-                                                    value={skill.confidence}
-                                                    onChange={(event: SyntheticEvent, newValue: number | null) => {
-                                                        updateSkill(skill.name, 'confidence', newValue)
-                                                    }}
-                                                    precision={0.5}
-                                                />
-                                            </td>
-                                        </tr>
-                                    )
-                                })
+                                renderTechSkills()
                             }
                         </tbody>
                     </table>
