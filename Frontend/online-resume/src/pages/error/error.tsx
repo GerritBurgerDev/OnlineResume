@@ -11,7 +11,7 @@ const Error = () => {
             </h1>
             <h1 className="sniff">
                 Oops!
-                <div className="shake--2_5s">*Sniff Sniff*</div>
+                <div className="shake--3">*Sniff Sniff*</div>
             </h1>
             <p className="reason">
                 Hmmmmm. I can&apos;t seem to find the page you are looking for. <br/>
