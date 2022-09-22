@@ -8,7 +8,7 @@ type IconCardProps = {
     isCustom?: boolean,
     size: number,
     color?: string,
-    onCardClick?: Function,
+    onCardClick?: (name: string) => void,
 }
 
 const IconCard = (props: IconCardProps) => {

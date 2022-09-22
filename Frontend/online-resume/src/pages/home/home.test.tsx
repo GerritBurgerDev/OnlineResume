@@ -7,7 +7,7 @@ import {HomeCo} from "@/helpers/component-objects/home-co";
 
 describe('Home Page Tests', () => {
     let HomeComponent: HomeCo;
-    let service;
+    // let service;
 
     beforeAll(() => {
         // service = new GlobalClient();

@@ -7,15 +7,15 @@ export class BaseCo {
         this.component = component;
     }
 
-    getElement = (id: string): ShallowWrapper<any> | undefined => {
+    getElement = (id: string): ShallowWrapper | undefined => {
         return this.component?.find(`[data-test="${id}"]`);
     }
 
-    getElementByClassName = (id: string): ShallowWrapper<any> | undefined => {
+    getElementByClassName = (id: string): ShallowWrapper | undefined => {
         return this.component?.find(`.${id}`);
     }
 
-    getElementAt = (id: string, index: number): ShallowWrapper<any> | undefined => {
+    getElementAt = (id: string, index: number): ShallowWrapper | undefined => {
         return this.getElement(id)?.at(index);
     }
 
