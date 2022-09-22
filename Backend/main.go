@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -26,15 +26,20 @@ func handleRequests() {
 	router.HandleFunc("/recommendations", AddRecommendation).Methods("POST")
 	router.HandleFunc("/recommendation/{id}", GetRecommendation).Methods("GET")
 
-	cors := handlers.CORS(
-		handlers.AllowedOrigins([]string{os.Getenv("ORIGIN_ALLOWED")}),
-		handlers.AllowedMethods([]string{"GET", "DELETE", "POST", "PUT", "OPTIONS"}),
-		handlers.AllowCredentials(),
-	)
+	cors := cors.New(cors.Options{
+		AllowedOrigins: []string{os.Getenv("ORIGIN_ALLOWED")},
+		AllowedMethods: []string{
+			http.MethodPost,
+			http.MethodGet,
+		},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	})
 
-	router.Use(cors)
+	//router.Use(cors)
+	handler := cors.Handler(router)
 
-	log.Fatal(http.ListenAndServe(":8081", router))
+	log.Fatal(http.ListenAndServe(":8081", handler))
 }
 
 func connectDatabase() (*mongo.Client, context.Context) {

@@ -3,7 +3,7 @@ import {mount, shallow} from 'enzyme';
 import Home from './home';
 import {ALL_SKILLS, SELECTED_SKILL_ALL, SKILL_PHP} from '@/constants/global-constants';
 import {HomeCo} from "@/helpers/component-objects/home-co";
-import {GlobalClient} from "../../helpers/services/global.service";
+import {GlobalClient} from "../../helpers/services/base-client";
 
 describe('Home Page Tests', () => {
     let HomeComponent: HomeCo;
