@@ -14,7 +14,7 @@ const Error = () => {
                 <div className="shake--3">*Sniff Sniff*</div>
             </h1>
             <p className="reason">
-                Hmmmmm. I can&apos;t seem to find the page you are looking for. <br/>
+                Hmmmmm... I can&apos;t seem to find the page you are looking for. <br/>
                 This means I am most probably still building this page.
             </p>
         </div>
