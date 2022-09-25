@@ -8,6 +8,7 @@ export interface TechSkill {
     icon: string,
     name: string,
     type: string,
+    about: string,
     projects: string[],
     experienceDuration: string,
     confidence: number
