@@ -1,11 +1,8 @@
-import React, {SyntheticEvent, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./home.scss";
-import myAvatar from "@/assets/images/my-avatar.jpeg";
-import companyLogo from "@/assets/images/company-logo.png";
 import IconCard from "@/components/icon-card/icon-card";
-import { LinkedIn, GitHub } from '@mui/icons-material';
-import {Tooltip, Icon, Rating, Button} from "@mui/material";
-import {green, orange, red} from "@mui/material/colors";
+import {Tooltip, Icon, Rating} from "@mui/material";
+import {orange} from "@mui/material/colors";
 import {TechSkill} from "@/interfaces/global-interfaces";
 import {SELECTED_SKILL_ALL} from "@/constants/global-constants";
 import {useCommonStore} from "@/stores/common-store";
@@ -13,14 +10,14 @@ import {jsx} from "@emotion/react";
 import JSX = jsx.JSX;
 import CircularProgressBar from "@/components/progress/circular-progress-bar";
 import _ from "lodash";
-import axios from "axios";
+import MyBio from "@/pages/home/header/my-bio";
+import CurrentEmployment from "@/pages/home/header/current-employment";
 
 const Home = () => {
     const { commonDataLoading, techSkills, getCommonData } = useCommonStore((state) => state);
 
     const [selectedSkill, setSelectedSkill] = useState<TechSkill>(SELECTED_SKILL_ALL);
     const [switchSkill, setSwitchSkill] = useState<string>('');
-
 
     const selectSkill = (name: string) => {
         if (!switchSkill && _.toLower(selectedSkill.name) !== _.toLower(name)) {
@@ -94,11 +91,6 @@ const Home = () => {
                         <div className="bottom-section">
                             <h1>Projects</h1>
                             <div className="projects">
-                                <span> <a>Project 1</a> - 1 Year </span>
-                                <span> <a>Project 1</a> - 1 Year </span>
-                                <span> <a>Project 1</a> - 1 Year </span>
-                                <span> <a>Project 1</a> - 1 Year </span>
-                                <span> <a>Project 1</a> - 1 Year </span>
                                 <span> <a>Project 1</a> - 1 Year </span>
                             </div>
                         </div>
@@ -185,92 +177,12 @@ const Home = () => {
         );
     }
 
-
     return (
         <div className="home-page">
             <div className="header-section fade-in--0_5s">
-                <div className="my-bio">
-                    <div className="top-section">
-                        <div className="image-container">
-                            <img src={myAvatar} alt="my-avatar"/>
-                        </div>
+                <MyBio />
 
-                        <div className="content-container">
-                            <h1>Who am I?</h1>
-
-                            <p>TLDR; an excellent software engineer and a hard worker.</p>
-
-                            <p>
-                                On a serious note, I&apos;m a mid-level software engineer specialising in Go and Typescript (React) and
-                                I&apos;m very passionate about development and learning new things.
-                            </p>
-
-                            <p>
-                                Why do I do this? I get an overwhelming sense of satisfaction from working with a team to build
-                                out projects and seeing it flourish. Software development is not only my job but also a hobby which
-                                means I get up every morning feeling excited thinking about today&apos;s challenges!
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="actions-container">
-                        <Button variant="contained">
-                            <Icon>recommend</Icon>
-                            Recommend
-                        </Button>
-                        <Button variant="contained">
-                            <LinkedIn />
-                        </Button>
-                        <Button variant="contained">
-                            <GitHub />
-                        </Button>
-                    </div>
-                </div>
-
-                <div className="current-employment-container">
-                    <div className="current-employment">
-                        <div className="title-section">
-                            <div className="left-section">
-                                <h2>Current Employment</h2>
-                                <span>Andile Solutions</span>
-
-                                <div className="position">
-                                    <h3>Position:</h3>
-                                    <span className="position-text">Mid-level Fullstack engineer</span>
-                                </div>
-                            </div>
-
-                            <div className="right-section">
-                                <img src={companyLogo} alt="company-logo"/>
-                            </div>
-                        </div>
-
-                        <div className="stack-section">
-                            <div className="left-section">
-                                <h2>Technologies</h2>
-
-                                <div className="technologies-container">
-                                    <IconCard icon="go" isCustom size={45} onCardClick={selectSkill} />
-                                    <IconCard icon="react" isCustom size={45} onCardClick={selectSkill} />
-                                    <IconCard icon="aws" isCustom size={45} onCardClick={selectSkill} />
-                                    <IconCard icon="mongodb" isCustom size={45} onCardClick={selectSkill} />
-                                </div>
-                            </div>
-
-                            <div className="right-section">
-                                <Tooltip
-                                    title={<div>
-                                        Current Job Satisfaction: <span style={{ color: green[300] }}>Happy</span>
-                                    </div>}
-                                >
-                                    <div>
-                                        <IconCard icon="mood" size={80} color={green[400]}/>
-                                    </div>
-                                </Tooltip>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <CurrentEmployment selectSkill={selectSkill}/>
             </div>
 
             <div className="tech-skills-section fade-in--0_5s">

@@ -1,7 +1,17 @@
 export interface ICommonData {
     techSkills: {
         [key: string]: TechSkill
-    }
+    },
+    currentEmployment: ICurrentEmployment
+}
+
+export interface ICurrentEmployment {
+    employer: string,
+    stack: string[],
+    position: string,
+    satisfaction: number,
+    project: string,
+    image: string
 }
 
 export interface TechSkill {
