@@ -10,8 +10,8 @@ import {jsx} from "@emotion/react";
 import JSX = jsx.JSX;
 import CircularProgressBar from "@/components/progress/circular-progress-bar";
 import _ from "lodash";
-import MyBio from "@/pages/home/header/my-bio";
-import CurrentEmployment from "@/pages/home/header/current-employment";
+import MyBio from "@/components/home/header/my-bio";
+import CurrentEmployment from "@/components/home/header/current-employment";
 
 const Home = () => {
     const { commonDataLoading, techSkills, getCommonData } = useCommonStore((state) => state);
