@@ -9,7 +9,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -27,7 +26,11 @@ func handleRequests() {
 	router.HandleFunc("/recommendation/{id}", GetRecommendation).Methods("GET")
 
 	cors := cors.New(cors.Options{
-		AllowedOrigins: []string{os.Getenv("ORIGIN_ALLOWED")},
+		AllowedOrigins: []string{
+			"http://127.0.0.1:5173",
+			"http://localhost:5173",
+			"https://env-prod.d1gm648slbbgl6.amplifyapp.com",
+		},
 		AllowedMethods: []string{
 			http.MethodPost,
 			http.MethodGet,
@@ -59,15 +62,8 @@ func connectDatabase() (*mongo.Client, context.Context) {
 	return getClient, ctx
 }
 
-func setupEnvVariables() {
-	// TODO: Update once app is hosted
-	os.Setenv("ORIGIN_ALLOWED", "*")
-}
-
 // main calls handleRequests which listens and routes all requests.
 func main() {
-	setupEnvVariables()
-
 	client, ctx = connectDatabase()
 	defer client.Disconnect(ctx)
 
