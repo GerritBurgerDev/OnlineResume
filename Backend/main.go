@@ -61,7 +61,7 @@ func connectDatabase() (*mongo.Client, context.Context) {
 
 func setupEnvVariables() {
 	// TODO: Update once app is hosted
-	os.Setenv("ORIGIN_ALLOWED", "http://127.0.0.1:5173")
+	os.Setenv("ORIGIN_ALLOWED", "*")
 }
 
 // main calls handleRequests which listens and routes all requests.
