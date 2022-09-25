@@ -27,7 +27,8 @@ export class BaseClient implements IBaseClient {
     }
 
     constructor(apiConfig: ApiConfig | undefined) {
-        if (import.meta.env.PROD) {
+        // TODO: I need to make this better.
+        if (!window.location.href.includes('localhost')) {
             this.BASE_URL = 'http://ec2-18-169-241-12.eu-west-2.compute.amazonaws.com:8081';
         }
 
