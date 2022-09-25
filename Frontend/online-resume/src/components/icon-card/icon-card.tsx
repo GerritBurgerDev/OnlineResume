@@ -3,7 +3,7 @@ import { Icon } from "@mui/material";
 import "@mui/icons-material";
 import React from "react";
 
-type IconCardProps = {
+interface IconCardProps {
     icon: string,
     isCustom?: boolean,
     size: number,

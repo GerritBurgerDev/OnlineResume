@@ -3,41 +3,45 @@ import "./home.scss";
 import myAvatar from "@/assets/images/my-avatar.jpeg";
 import companyLogo from "@/assets/images/company-logo.png";
 import IconCard from "@/components/icon-card/icon-card";
-import { LinkedIn, GitHub, Email } from '@mui/icons-material';
+import { LinkedIn, GitHub } from '@mui/icons-material';
 import {Tooltip, Icon, Rating, Button} from "@mui/material";
-import {green, orange} from "@mui/material/colors";
+import {green, orange, red} from "@mui/material/colors";
 import {TechSkill} from "@/interfaces/global-interfaces";
-import {ALL_SKILLS, SELECTED_SKILL_ALL} from "@/constants/global-constants";
+import {SELECTED_SKILL_ALL} from "@/constants/global-constants";
 import {useCommonStore} from "@/stores/common-store";
 import {jsx} from "@emotion/react";
 import JSX = jsx.JSX;
+import CircularProgressBar from "@/components/progress/circular-progress-bar";
+import _ from "lodash";
+import axios from "axios";
 
 const Home = () => {
     const { commonDataLoading, techSkills, getCommonData } = useCommonStore((state) => state);
 
     const [selectedSkill, setSelectedSkill] = useState<TechSkill>(SELECTED_SKILL_ALL);
-    // const [allSkills, setAllSkills] = useState<TechSkill[]>([]);
+    const [switchSkill, setSwitchSkill] = useState<string>('');
+
 
     const selectSkill = (name: string) => {
-        setSelectedSkill(ALL_SKILLS[name]);
+        if (!switchSkill && _.toLower(selectedSkill.name) !== _.toLower(name)) {
+            setSwitchSkill(name);
+        }
     };
 
-    // const updateSkill = (name: string, key: string, value: string | number | null ) => {
-    //     const updatedSkills: TechSkill[] = [
-    //         ...allSkills
-    //     ];
-    //
-    //     const skillIndex = updatedSkills.findIndex((skill: TechSkill) => skill.name === name);
-    //
-    //     if (skillIndex > -1) {
-    //         updatedSkills[skillIndex] = {
-    //             ...updatedSkills[skillIndex],
-    //             [key]: value
-    //         };
-    //     }
-    //
-    //     setAllSkills(updatedSkills);
-    // };
+    useEffect(() => {
+        if (switchSkill) {
+            setTimeout(() => {
+                const skill = techSkills.find((skill: TechSkill) => _.toLower(skill.name) === _.toLower(switchSkill));
+                setSelectedSkill(skill || SELECTED_SKILL_ALL);
+                setSwitchSkill('');
+            }, selectedSkill.name === SELECTED_SKILL_ALL.name ? 0 : 200);
+        }
+    }, [switchSkill]);
+
+    // TODO: Move to store and use once I have admin working
+    const updateSkill = (name: string, key: string, value: string | number | null ) => {
+        // TODO: Call api to about skill details
+    };
 
     useEffect(() => {
         const fetchCommonData = async () => {
@@ -45,14 +49,100 @@ const Home = () => {
         }
 
         fetchCommonData().catch(() => { /* DONE */ });
-    }, []);
+    }, [getCommonData]);
+
+    const calculateProficiency = (value: number): string => {
+        if (value <= 40) {
+            return 'Familiar';
+        }
+        if (value > 40 && value <= 70) {
+            return 'Proficient';
+        }
+
+        return 'Fluent';
+    }
+
+    const getExperienceValue = (experience: string): number => {
+        const years = experience.match(/\d+(\syear(s?))/gi)?.at(0)?.match(/\d+/gi)?.at(0) || 0;
+        let months = experience.match(/\d+(\smonth(s?))/gi)?.at(0)?.match(/\d+/gi)?.at(0) || 0 ;
+
+        months = parseInt(`${months || 0}`) / 12;
+
+        return ((parseInt(`${years}`) + months) / 5) * 100;
+    }
+
+    const renderSpecificSkill = (): JSX.Element => {
+        return (
+            <div className="specific-skill">
+                <div className={`left-section ${ switchSkill ? 'fade-out--0_2s' : 'fade-in--0_2s'}`}>
+                    <IconCard icon={selectedSkill.icon} size={300} isCustom />
+                </div>
+                <div className="right-section">
+                    <div className={`left-section ${ switchSkill ? 'fade-out--0_2s' : 'fade-in--0_2s'}`}>
+                        <div className="top-section">
+                            <h1>About</h1>
+                            <div
+                                contentEditable={true}
+                                suppressContentEditableWarning={true}
+                                onBlur={(e) => {console.log(e.currentTarget.textContent)}}
+                            >
+                                {
+                                    selectedSkill.about ? selectedSkill.about : <span>No description available.</span>
+                                }
+                            </div>
+                        </div>
+                        <div className="bottom-section">
+                            <h1>Projects</h1>
+                            <div className="projects">
+                                <span> <a>Project 1</a> - 1 Year </span>
+                                <span> <a>Project 1</a> - 1 Year </span>
+                                <span> <a>Project 1</a> - 1 Year </span>
+                                <span> <a>Project 1</a> - 1 Year </span>
+                                <span> <a>Project 1</a> - 1 Year </span>
+                                <span> <a>Project 1</a> - 1 Year </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="right-section">
+                        <div className="top-section">
+                            <div className="experience">
+                                <h2>Experience</h2>
+                                <CircularProgressBar
+                                    size={'120px'}
+                                    variant="determinate"
+                                    value={getExperienceValue(selectedSkill.experienceDuration)}
+                                    thickness={2.5}
+                                    icon="schedule"
+                                    label={calculateProficiency(getExperienceValue(selectedSkill.experienceDuration))}
+                                    labelSize={18}
+                                />
+                            </div>
+
+                            <div className="confidence">
+                                <h2>Confidence</h2>
+                                <CircularProgressBar
+                                    size={'120px'}
+                                    variant="determinate"
+                                    value={(selectedSkill.confidence / 5) * 100}
+                                    thickness={2.5}
+                                    icon="mood"
+                                    label={calculateProficiency((selectedSkill.confidence / 5) * 100)}
+                                    labelSize={18}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     const renderTechSkills = (): JSX.Element[] | JSX.Element => {
         return (
             !commonDataLoading ? techSkills.map((skill: TechSkill) => {
                 return (
                     <tr key={skill.name}>
-                        <td className="tech-skill" data-test="tech-skill" onClick={ () => selectSkill(skill.icon) }>
+                        <td className="tech-skill" data-test="tech-skill" onClick={ () => selectSkill(skill.name) }>
                             <IconCard icon={skill.icon} isCustom size={32}/>
                             <span>{skill.name}</span>
                         </td>
@@ -74,9 +164,9 @@ const Home = () => {
                             <Rating
                                 name="simple-controlled"
                                 value={skill.confidence}
-                                onChange={(event: SyntheticEvent, newValue: number | null) => {
-                                    // updateSkill(skill.name, 'confidence', newValue)
-                                }}
+                                // onChange={(event: SyntheticEvent, newValue: number | null) => {
+                                //     // updateSkill(skill.name, 'confidence', newValue)
+                                // }}
                                 precision={0.5}
                                 readOnly
                             />
@@ -95,9 +185,10 @@ const Home = () => {
         );
     }
 
+
     return (
         <div className="home-page">
-            <div className="header-section">
+            <div className="header-section fade-in--0_5s">
                 <div className="my-bio">
                     <div className="top-section">
                         <div className="image-container">
@@ -182,7 +273,7 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className="tech-skills-section">
+            <div className="tech-skills-section fade-in--0_5s">
                 <div className="title">
                     <h1>
                         Technologies & Frameworks
@@ -215,20 +306,24 @@ const Home = () => {
                 </div>
 
                 <div className="content-container">
-                    <table className="tech-table">
-                        <tbody>
-                            <tr className="headings">
-                                <th>Technology</th>
-                                <th>Type</th>
-                                <th>Projects</th>
-                                <th>Experience</th>
-                                <th>Confidence</th>
-                            </tr>
-                            {
-                                renderTechSkills()
-                            }
-                        </tbody>
-                    </table>
+                    {
+                        selectedSkill.name !== SELECTED_SKILL_ALL.name ? renderSpecificSkill() : (
+                            <table className="tech-table fade-in--0_4s">
+                                <tbody>
+                                <tr className="headings">
+                                    <th>Technology</th>
+                                    <th>Type</th>
+                                    <th>Projects</th>
+                                    <th>Experience</th>
+                                    <th>Confidence</th>
+                                </tr>
+                                {
+                                    renderTechSkills()
+                                }
+                                </tbody>
+                            </table>
+                        )
+                    }
                 </div>
             </div>
         </div>

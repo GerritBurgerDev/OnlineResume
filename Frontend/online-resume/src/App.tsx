@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import '@/helpers/axios-interceptor';
 import {
   createBrowserRouter,
-  RouterProvider, useLocation,
+  RouterProvider,
 } from "react-router-dom";
 import './App.scss'
 import Navbar from "@/components/navbar/navbar";
