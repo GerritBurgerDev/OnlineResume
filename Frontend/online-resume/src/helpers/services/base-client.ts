@@ -11,7 +11,7 @@ interface IBaseClient {
 }
 
 export class BaseClient implements IBaseClient {
-    BASE_URL = 'http://localhost:8081';
+    BASE_URL = 'http://ec2-18-169-241-12.eu-west-2.compute.amazonaws.com:8081/';
     TIMEOUT = 10000; // 10 seconds
     private apiConfig: ApiConfig | undefined;
     private client: AxiosInstance;
