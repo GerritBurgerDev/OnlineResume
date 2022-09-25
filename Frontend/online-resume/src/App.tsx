@@ -25,8 +25,7 @@ function App() {
   ]);
 
   useEffect(() => {
-    console.log(process.env.NODE_ENV);
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       mountStoreDevtool('CommonStore', useCommonStore);
     }
   }, []);

@@ -11,8 +11,8 @@ interface IBaseClient {
 }
 
 export class BaseClient implements IBaseClient {
-    BASE_URL = 'http://ec2-18-169-241-12.eu-west-2.compute.amazonaws.com:8081/';
-    TIMEOUT = 10000; // 10 seconds
+    private BASE_URL = 'http://localhost:8081/';
+    private TIMEOUT = 10000; // 10 seconds
     private apiConfig: ApiConfig | undefined;
     private client: AxiosInstance;
 
@@ -27,6 +27,10 @@ export class BaseClient implements IBaseClient {
     }
 
     constructor(apiConfig: ApiConfig | undefined) {
+        if (import.meta.env.PROD) {
+            this.BASE_URL = 'http://ec2-18-169-241-12.eu-west-2.compute.amazonaws.com:8081';
+        }
+
         this.apiConfig = apiConfig;
         this.client = this.createClient();
     }
