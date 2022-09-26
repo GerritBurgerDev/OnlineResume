@@ -33,12 +33,12 @@ const Home = () => {
                 setSwitchSkill('');
             }, selectedSkill.name === SELECTED_SKILL_ALL.name ? 0 : 200);
         }
-    }, [switchSkill]);
+    }, [selectedSkill.name, switchSkill, techSkills]);
 
     // TODO: Move to store and use once I have admin working
-    const updateSkill = (name: string, key: string, value: string | number | null ) => {
+    // const updateSkill = (name: string, key: string, value: string | number | null ) => {
         // TODO: Call api to about skill details
-    };
+    // };
 
     useEffect(() => {
         const fetchCommonData = async () => {
