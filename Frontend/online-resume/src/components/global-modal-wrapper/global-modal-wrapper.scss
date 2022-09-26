@@ -1,0 +1,23 @@
+
+@import "@/assets/css/colors.scss";
+
+.modal-content-container {
+  background-color: $dark-color;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: fit-content;
+  padding: 20px;
+
+  .modal-close-button {
+    position: absolute;
+    right: 20px;
+    top: 25px;
+
+    &:hover {
+      cursor: pointer;
+      color: $red-color;
+    }
+  }
+}

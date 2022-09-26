@@ -3,8 +3,11 @@ import "./navbar.scss";
 import {AppBar, Toolbar, IconButton} from '@mui/material';
 import { Settings, Email } from '@mui/icons-material';
 import MyLogo from "@/assets/images/dachshund-logo.png";
+import {useModalStore} from "@/stores/modal-store";
 
 const Navbar = () => {
+    const { openModal } = useModalStore((state) => state);
+
     return (
         <AppBar position="static" className="navbar">
             <Toolbar>
@@ -23,7 +26,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="right-elements">
-                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => openModal('EMAIL')}>
                         <Email />
                     </IconButton>
                     <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>

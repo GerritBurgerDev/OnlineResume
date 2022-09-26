@@ -10,6 +10,10 @@ import Home from "@/pages/home/home";
 import Error from "@/pages/error/error";
 import {useCommonStore} from "@/stores/common-store";
 import {mountStoreDevtool} from "simple-zustand-devtools";
+import GlobalModalWrapper from "@/components/global-modal-wrapper/global-modal-wrapper";
+import {useModalStore} from "@/stores/modal-store";
+import {useNotificationStore} from "@/stores/notification-store";
+import NotificationWrapper from "@/components/notification-wrapper/notification-wrapper";
 
 function App() {
   const router = createBrowserRouter([
@@ -27,6 +31,8 @@ function App() {
   useEffect(() => {
     if (import.meta.env.DEV) {
       mountStoreDevtool('CommonStore', useCommonStore);
+      mountStoreDevtool('NotificationStore', useNotificationStore);
+      mountStoreDevtool('ModalStore', useModalStore);
     }
   }, []);
 
@@ -36,6 +42,8 @@ function App() {
       <div className="page-content">
         <RouterProvider router={router} />
       </div>
+      <GlobalModalWrapper />
+      <NotificationWrapper />
     </div>
   )
 }
