@@ -1,0 +1,36 @@
+@import "@/assets/css/colors.scss";
+
+.recommendation {
+  padding: 25px;
+  background-color: $dark-color-light;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 10px 5px rgba(black, 0.3);
+
+  &-avatar-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  &-description-container {
+    margin: 20px 0;
+    font-style: italic;
+  }
+
+  &-user-info-container {
+    h3, h4 {
+      margin: 0;
+    }
+
+    h4 {
+      font-weight: 200;
+    }
+  }
+
+  &-rating-container {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+  }
+}

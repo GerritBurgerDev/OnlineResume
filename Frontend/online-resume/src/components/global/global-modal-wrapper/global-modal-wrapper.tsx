@@ -3,7 +3,7 @@ import "./global-modal-wrapper.scss";
 import {useModalStore} from "@/stores/modal-store";
 import {Modal, Box} from "@mui/material";
 import {Close} from "@mui/icons-material";
-import EmailMe from "@/components/email-me/email-me";
+import EmailMe from "@/components/global/email-me/email-me";
 
 const GlobalModalWrapper = () => {
     const { modalType, closeModal } = useModalStore((state) => state);

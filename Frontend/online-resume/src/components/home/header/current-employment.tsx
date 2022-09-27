@@ -1,6 +1,6 @@
 import companyLogo from "@/assets/images/company-logo.png";
 import "./current-employment.scss";
-import IconCard from "@/components/icon-card/icon-card";
+import IconCard from "@/components/util/icon-card/icon-card";
 import {Tooltip} from "@mui/material";
 import {green} from "@mui/material/colors";
 import React from "react";
@@ -27,7 +27,7 @@ const CurrentEmployment = (props: ICurrentEmploymentProps) => {
                             <span className="position-text">{currentEmployment.position}</span>
                         </div>
 
-                        <div className="project">
+                        <div className="current-employment-project">
                             <h3>Project:</h3>
                             <span className="position-text">{currentEmployment.project}</span>
                         </div>
@@ -51,10 +51,6 @@ const CurrentEmployment = (props: ICurrentEmploymentProps) => {
                                     );
                                 })
                             }
-                            {/*<IconCard icon="go" isCustom size={45} onCardClick={props.selectSkill} />*/}
-                            {/*<IconCard icon="react" isCustom size={45} onCardClick={props.selectSkill} />*/}
-                            {/*<IconCard icon="aws" isCustom size={45} onCardClick={props.selectSkill} />*/}
-                            {/*<IconCard icon="mongodb" isCustom size={45} onCardClick={props.selectSkill} />*/}
                         </div>
                     </div>
 

@@ -5,15 +5,16 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './App.scss'
-import Navbar from "@/components/navbar/navbar";
+import Navbar from "@/components/global/navbar/navbar";
 import Home from "@/pages/home/home";
 import Error from "@/pages/error/error";
 import {useCommonStore} from "@/stores/common-store";
 import {mountStoreDevtool} from "simple-zustand-devtools";
-import GlobalModalWrapper from "@/components/global-modal-wrapper/global-modal-wrapper";
+import GlobalModalWrapper from "@/components/global/global-modal-wrapper/global-modal-wrapper";
 import {useModalStore} from "@/stores/modal-store";
 import {useNotificationStore} from "@/stores/notification-store";
-import NotificationWrapper from "@/components/notification-wrapper/notification-wrapper";
+import NotificationWrapper from "@/components/global/notification-wrapper/notification-wrapper";
+import Experience from "@/pages/experience/experience";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,6 +22,10 @@ function App() {
       path: "/",
       element: <Home />,
       errorElement: <Error />
+    },
+    {
+      path: "/projects",
+      element: <Experience />
     },
     {
       path: "/about-me",

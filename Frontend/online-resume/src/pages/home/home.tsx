@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./home.scss";
-import IconCard from "@/components/icon-card/icon-card";
+import IconCard from "@/components/util/icon-card/icon-card";
 import {Tooltip, Icon, Rating} from "@mui/material";
 import {orange} from "@mui/material/colors";
 import {TechSkill} from "@/interfaces/global-interfaces";
@@ -8,7 +8,7 @@ import {SELECTED_SKILL_ALL} from "@/constants/global-constants";
 import {useCommonStore} from "@/stores/common-store";
 import {jsx} from "@emotion/react";
 import JSX = jsx.JSX;
-import CircularProgressBar from "@/components/progress/circular-progress-bar";
+import CircularProgressBar from "@/components/util/progress/circular-progress-bar";
 import _ from "lodash";
 import MyBio from "@/components/home/header/my-bio";
 import CurrentEmployment from "@/components/home/header/current-employment";
