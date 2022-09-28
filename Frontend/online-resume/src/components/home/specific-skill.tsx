@@ -1,5 +1,6 @@
 import IconCard from "@/components/util/icon-card/icon-card";
-import {getTimePassed, unixToDate} from "@/helpers/date-helper";
+import "./specific-skill.scss";
+import {getTimePassed} from "@/helpers/date-helper";
 import CircularProgressBar from "@/components/util/progress/circular-progress-bar";
 import React from "react";
 import {TechSkill} from "@/interfaces/global-interfaces";

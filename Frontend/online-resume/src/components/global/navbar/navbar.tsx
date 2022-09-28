@@ -21,8 +21,8 @@ const Navbar = () => {
                 <div className="center-elements">
                     <a href="/education">Education</a>
                     <a href="/projects">Experience</a>
-                    <a href="/projects">Recommendations</a>
-                    <a href="/projects">About</a>
+                    <a href="/recommendations">Recommendations</a>
+                    <a href="/about-me">About</a>
                 </div>
 
                 <div className="right-elements">
