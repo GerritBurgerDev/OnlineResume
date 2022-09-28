@@ -8,13 +8,15 @@ import {SELECTED_SKILL_ALL} from "@/constants/global-constants";
 import {useCommonStore} from "@/stores/common-store";
 import {jsx} from "@emotion/react";
 import JSX = jsx.JSX;
-import CircularProgressBar from "@/components/util/progress/circular-progress-bar";
 import _ from "lodash";
 import MyBio from "@/components/home/header/my-bio";
 import CurrentEmployment from "@/components/home/header/current-employment";
+import {useProjectsStore} from "@/stores/project-store";
+import SpecificSkill from "@/components/home/specific-skill";
 
 const Home = () => {
     const { commonDataLoading, techSkills, getCommonData } = useCommonStore((state) => state);
+    const { loadingProjectForSkill, projectsForSkill, getProjectsForSkill } = useProjectsStore((state) => state);
 
     const [selectedSkill, setSelectedSkill] = useState<TechSkill>(SELECTED_SKILL_ALL);
     const [switchSkill, setSwitchSkill] = useState<string>('');
@@ -48,84 +50,22 @@ const Home = () => {
         fetchCommonData().catch(() => { /* DONE */ });
     }, [getCommonData]);
 
-    const calculateProficiency = (value: number): string => {
-        if (value <= 40) {
-            return 'Familiar';
-        }
-        if (value > 40 && value <= 70) {
-            return 'Proficient';
+    useEffect(() => {
+        const fetchProjectsForSkill = async () => {
+            await getProjectsForSkill(selectedSkill.name);
         }
 
-        return 'Fluent';
-    }
-
-    const getExperienceValue = (experience: string): number => {
-        const years = experience.match(/\d+(\syear(s?))/gi)?.at(0)?.match(/\d+/gi)?.at(0) || 0;
-        let months = experience.match(/\d+(\smonth(s?))/gi)?.at(0)?.match(/\d+/gi)?.at(0) || 0 ;
-
-        months = parseInt(`${months || 0}`) / 12;
-
-        return ((parseInt(`${years}`) + months) / 5) * 100;
-    }
+        fetchProjectsForSkill().catch(() => { /* DONE */ });
+    }, [selectedSkill]);
 
     const renderSpecificSkill = (): JSX.Element => {
         return (
-            <div className="specific-skill">
-                <div className={`left-section ${ switchSkill ? 'fade-out--0_2s' : 'fade-in--0_2s'}`}>
-                    <IconCard icon={selectedSkill.icon} size={300} isCustom />
-                </div>
-                <div className="right-section">
-                    <div className={`left-section ${ switchSkill ? 'fade-out--0_2s' : 'fade-in--0_2s'}`}>
-                        <div className="top-section">
-                            <h1>About</h1>
-                            <div
-                                contentEditable={true}
-                                suppressContentEditableWarning={true}
-                                onBlur={(e) => {console.log(e.currentTarget.textContent)}}
-                            >
-                                {
-                                    selectedSkill.about ? selectedSkill.about : <span>No description available.</span>
-                                }
-                            </div>
-                        </div>
-                        <div className="bottom-section">
-                            <h1>Projects</h1>
-                            <div className="projects">
-                                <span> <a>Project 1</a> - 1 Year </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="right-section">
-                        <div className="top-section">
-                            <div className="experience">
-                                <h2>Experience</h2>
-                                <CircularProgressBar
-                                    size={'120px'}
-                                    variant="determinate"
-                                    value={getExperienceValue(selectedSkill.experienceDuration)}
-                                    thickness={2.5}
-                                    icon="schedule"
-                                    label={calculateProficiency(getExperienceValue(selectedSkill.experienceDuration))}
-                                    labelSize={18}
-                                />
-                            </div>
-
-                            <div className="confidence">
-                                <h2>Confidence</h2>
-                                <CircularProgressBar
-                                    size={'120px'}
-                                    variant="determinate"
-                                    value={(selectedSkill.confidence / 5) * 100}
-                                    thickness={2.5}
-                                    icon="mood"
-                                    label={calculateProficiency((selectedSkill.confidence / 5) * 100)}
-                                    labelSize={18}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <SpecificSkill
+                loadingProjectForSkill={loadingProjectForSkill}
+                projectsForSkill={projectsForSkill}
+                selectedSkill={selectedSkill}
+                switchSkill={switchSkill}
+            />
         );
     }
 

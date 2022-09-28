@@ -11,4 +11,5 @@ export interface IGlobalClient {
 
 export interface IProjectClient {
     getAllProjects(): Promise<IProject[] | undefined>
+    getProjectsForSkill(skillName: string): Promise<IProject[] | undefined>
 }

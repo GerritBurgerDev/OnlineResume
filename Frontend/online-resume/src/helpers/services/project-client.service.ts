@@ -15,4 +15,13 @@ export class ProjectClientService extends BaseClient implements IProjectClient {
             console.error(error);
         }
     }
+
+    getProjectsForSkill = async (skillName: string): Promise<IProject[] | undefined> => {
+        try {
+            return await this.get<IProject[]>(`/projects/${skillName}`);
+        } catch (error) {
+            // TODO: Error Handling
+            console.error(error);
+        }
+    }
 }
