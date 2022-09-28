@@ -18,4 +18,5 @@ type Recommendation struct {
 	Content           string  `bson:"Content"`
 	Rating            float64 `bson:"Rating"`
 	Timestamp         int     `bson:"Timestamp"`
+	ProjectId         int     `bson:"Timestamp"`
 }

@@ -27,7 +27,7 @@ func GetRecommendation(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	id, _ := strconv.Atoi(vars["id"])
 
-	result := Helpers.GetSingleDocument(client, "OnlineResume", "Recommendations", "Id", id)
+	result := Helpers.GetSingleDocument(client, "OnlineResume", "Recommendations", "id", id)
 
 	json.NewEncoder(writer).Encode(result)
 }
@@ -52,6 +52,29 @@ func AddRecommendation(writer http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(writer).Encode(result)
 }
 
+// GetProject is a GET method
+// Vars include {id int}
+// returns Project
+func GetProject(writer http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	id, _ := strconv.Atoi(vars["id"])
+
+	result := Helpers.GetSingleDocument(client, "OnlineResume", "Projects", "id", id)
+
+	json.NewEncoder(writer).Encode(result)
+}
+
+// GetAllProjects is a GET method
+// returns an array of Projects.
+func GetAllProjects(writer http.ResponseWriter, request *http.Request) {
+	results := Helpers.GetEntireCollection(client, "OnlineResume", "Projects")
+
+	json.NewEncoder(writer).Encode(results)
+}
+
+// GetCommonData is a GET meethod
+// Common data consists of tech skills, my biography and current employment.
+// returns global data object
 func GetCommonData(writer http.ResponseWriter, request *http.Request) {
 	result := Helpers.GetEntireCollection(client, "OnlineResume", "GlobalData")
 
