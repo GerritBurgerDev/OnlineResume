@@ -1,14 +1,5 @@
 package Structs
 
-// Comment - The struct for the Comment type.
-type Comment struct {
-	Id        int
-	Title     string
-	Author    string
-	Content   string
-	DateAdded int
-}
-
 // Recommendation - The struct for the Recommendation type.
 type Recommendation struct {
 	Id                int     `bson:"Id"`
@@ -19,4 +10,9 @@ type Recommendation struct {
 	Rating            float64 `bson:"Rating"`
 	Timestamp         int     `bson:"Timestamp"`
 	ProjectId         int     `bson:"Timestamp"`
+}
+
+type MongoOptions struct {
+	sort    string
+	filters []string
 }

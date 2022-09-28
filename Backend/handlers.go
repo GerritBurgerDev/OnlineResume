@@ -5,8 +5,10 @@ import (
 	"Backend/Structs"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
 	"strconv"
@@ -15,7 +17,7 @@ import (
 // GetAllRecommendations is a GET method
 // returns an array of Posts.
 func GetAllRecommendations(writer http.ResponseWriter, request *http.Request) {
-	results := Helpers.GetEntireCollection(client, "OnlineResume", "Recommendations")
+	results := Helpers.GetFromCollection(client, "OnlineResume", "Recommendations")
 
 	json.NewEncoder(writer).Encode(results)
 }
@@ -27,7 +29,13 @@ func GetRecommendation(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	id, _ := strconv.Atoi(vars["id"])
 
-	result := Helpers.GetSingleDocument(client, "OnlineResume", "Recommendations", "id", id)
+	opt := bson.M{
+		"filters": []bson.M{
+			{"id": id},
+		},
+	}
+
+	result := Helpers.GetFromCollection(client, "OnlineResume", "Recommendations", opt)
 
 	json.NewEncoder(writer).Encode(result)
 }
@@ -59,7 +67,37 @@ func GetProject(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	id, _ := strconv.Atoi(vars["id"])
 
-	result := Helpers.GetSingleDocument(client, "OnlineResume", "Projects", "id", id)
+	opt := bson.M{
+		"filters": []bson.M{
+			{"id": id},
+		},
+	}
+
+	result := Helpers.GetFromCollection(client, "OnlineResume", "Projects", opt)
+
+	json.NewEncoder(writer).Encode(result)
+}
+
+func GetProjectsForSkill(writer http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	skill, _ := vars["skill"]
+
+	opt := bson.M{
+		"filters": []bson.M{
+			{
+				"stack": bson.M{
+					"$in": []primitive.Regex{
+						{
+							Pattern: fmt.Sprintf("^%s$", skill),
+							Options: "i",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	result := Helpers.GetFromCollection(client, "OnlineResume", "Projects", opt)
 
 	json.NewEncoder(writer).Encode(result)
 }
@@ -67,7 +105,14 @@ func GetProject(writer http.ResponseWriter, request *http.Request) {
 // GetAllProjects is a GET method
 // returns an array of Projects.
 func GetAllProjects(writer http.ResponseWriter, request *http.Request) {
-	results := Helpers.GetEntireCollection(client, "OnlineResume", "Projects")
+	opt := bson.M{
+		"sorting": []bson.M{
+			{"endDate": -1},
+			{"id": -1},
+		},
+	}
+
+	results := Helpers.GetFromCollection(client, "OnlineResume", "Projects", opt)
 
 	json.NewEncoder(writer).Encode(results)
 }
@@ -76,7 +121,7 @@ func GetAllProjects(writer http.ResponseWriter, request *http.Request) {
 // Common data consists of tech skills, my biography and current employment.
 // returns global data object
 func GetCommonData(writer http.ResponseWriter, request *http.Request) {
-	result := Helpers.GetEntireCollection(client, "OnlineResume", "GlobalData")
+	result := Helpers.GetFromCollection(client, "OnlineResume", "GlobalData")
 
 	json.NewEncoder(writer).Encode(result[0])
 }

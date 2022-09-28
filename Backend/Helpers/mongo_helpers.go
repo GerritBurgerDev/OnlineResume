@@ -5,17 +5,57 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// GetEntireCollection returns all the documents in a collection
+// GetFromCollection returns all the documents in a collection that satisfy the options given
 // client - the global mongoDB client
 // dbName - the name of the database where the collection lives
 // coll - the name of the collection you are trying to grab
-func GetEntireCollection(client *mongo.Client, dbName string, coll string) []bson.M {
+// findOptions - the mongo options (sorting, filtering)
+// returns an array of documents
+func GetFromCollection[T bson.M](client *mongo.Client, dbName string, coll string, findOptions ...T) []bson.M {
+	var sort bson.D
+	filter := bson.D{{}}
+
+	if findOptions != nil {
+		if sorting, ok := findOptions[0]["sorting"]; ok {
+			for _, val := range sorting.([]bson.M) {
+				var testBson bson.E
+				for k, v := range val {
+					testBson = bson.E{k, v}
+				}
+				sort = append(sort, testBson)
+			}
+		}
+
+		if filters, ok := findOptions[0]["filters"]; ok {
+			for _, val := range filters.([]bson.M) {
+				var filterBson bson.E
+				for k, v := range val {
+					filterBson = bson.E{k, v}
+				}
+				filter = append(filter, filterBson)
+			}
+		}
+	}
+
+	var opts *options.FindOptions
+	if len(sort) != 0 {
+		opts = options.Find().SetSort(sort)
+	}
+
 	collection := client.Database(dbName).Collection(coll)
 
-	cursor, err := collection.Find(context.TODO(), bson.D{{}})
+	cursor, err := collection.Find(context.TODO(), filter, opts)
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return []bson.M{{
+				"Message":    "The document you are looking for could not be found",
+				"Error":      err,
+				"StatusCode": 404,
+			}}
+		}
 		panic(err)
 	}
 
@@ -25,32 +65,6 @@ func GetEntireCollection(client *mongo.Client, dbName string, coll string) []bso
 	}
 
 	return results
-}
-
-// GetSingleDocument returns a single the documents in a collection given a specific key and value
-// client - the global mongoDB client
-// dbName - the name of the database where the collection lives
-// coll - the name of the collection you are trying to grab
-// key - the key string to lookup
-// value - the associated value for the given key
-func GetSingleDocument(client *mongo.Client, dbName string, coll string, key string, value any) bson.M {
-	collection := client.Database(dbName).Collection(coll)
-
-	var result bson.M
-	err := collection.FindOne(context.TODO(), bson.D{{key, value}}).Decode(&result)
-
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return bson.M{
-				"Message":    "The document you are looking for could not be found",
-				"Error":      err,
-				"StatusCode": 404,
-			}
-		}
-		panic(err)
-	}
-
-	return result
 }
 
 // AddSingleDocument inserts a single document into a collection in a specified database
