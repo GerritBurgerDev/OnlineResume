@@ -8,6 +8,7 @@ import Masonry from "@mui/lab/Masonry"
 import Recommendation from "@/components/experience/recommendation/recommendation";
 import {IProject, IRecommendation} from "@/interfaces/project-interfaces";
 import {yellow} from "@mui/material/colors";
+import {MAP_SKILL_NAME_TO_ICON, MAX_TIMESTAMP} from "@/constants/global-constants";
 
 const Project = (props: IProject)  => {
     const [recommendations, setRecommendations] = useState<IRecommendation[]>([
@@ -52,7 +53,11 @@ const Project = (props: IProject)  => {
 
     const displayDate = () => {
         const startDate = moment.unix(props.startDate).format("MM/YYYY");
-        const endDate = moment.unix(props.endDate).format("MM/YYYY");
+        let endDate = moment.unix(props.endDate).format("MM/YYYY");
+
+        if (props.endDate === MAX_TIMESTAMP) {
+            endDate = moment.unix(moment().unix()).format("MM/YYYY");
+        }
 
         return `${startDate} - ${endDate}`;
     }
@@ -93,7 +98,7 @@ const Project = (props: IProject)  => {
                 {
                     props.stack.map(tech => {
                         return (
-                            <IconCard key={tech} icon={tech} isCustom />
+                            <IconCard key={tech} icon={MAP_SKILL_NAME_TO_ICON[tech]} isCustom />
                         )
                     })
                 }
