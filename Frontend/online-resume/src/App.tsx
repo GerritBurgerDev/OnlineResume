@@ -15,6 +15,7 @@ import {useModalStore} from "@/stores/modal-store";
 import {useNotificationStore} from "@/stores/notification-store";
 import NotificationWrapper from "@/components/global/notification-wrapper/notification-wrapper";
 import Experience from "@/pages/experience/experience";
+import {useProjectsStore} from "@/stores/project-store";
 
 function App() {
   const router = createBrowserRouter([
@@ -38,6 +39,7 @@ function App() {
       mountStoreDevtool('CommonStore', useCommonStore);
       mountStoreDevtool('NotificationStore', useNotificationStore);
       mountStoreDevtool('ModalStore', useModalStore);
+      mountStoreDevtool('ProjectStore', useProjectsStore);
     }
   }, []);
 

@@ -1,9 +1,19 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./experience.scss";
 import Project from "@/components/experience/project/project";
+import {useProjectsStore} from "@/stores/project-store";
+import {IProject} from "@/interfaces/project-interfaces";
 
 const Experience = () => {
-    const projects = [1, 2, 3,4 ,5 ]
+    const { projects, getAllProjects } = useProjectsStore((state) => state);
+
+    useEffect(() => {
+        const fetchAllProjects = async () => {
+            await getAllProjects();
+        }
+
+        fetchAllProjects().catch(() => { /* DONE */ });
+    }, [getAllProjects]);
 
     return (
         <div className="experience-page">
@@ -11,9 +21,9 @@ const Experience = () => {
 
             <div className="projects-container">
                 {
-                    projects.map(i => {
+                    projects.map((project: IProject) => {
                         return (
-                            <Project key={i} />
+                            <Project key={project.id}  {...project} />
                         )
                     })
                 }
