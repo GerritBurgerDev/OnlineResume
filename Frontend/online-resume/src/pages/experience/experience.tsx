@@ -16,7 +16,7 @@ const Experience = () => {
     }, [getAllProjects]);
 
     return (
-        <div className="experience-page">
+        <div className="experience-page fade-in--1s">
             <h1>Projects</h1>
 
             <div className="projects-container">

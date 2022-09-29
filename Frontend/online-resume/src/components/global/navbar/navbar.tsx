@@ -4,7 +4,12 @@ import {AppBar, Toolbar, Button, IconButton, Menu, MenuItem, Fade} from '@mui/ma
 import { Settings, Email, LockOutlined } from '@mui/icons-material';
 import MyLogo from "@/assets/images/dachshund-logo.png";
 import {useModalStore} from "@/stores/modal-store";
-import {GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline, GoogleLogout} from "react-google-login";
+import {
+    GoogleLogin,
+    GoogleLoginResponse,
+    GoogleLoginResponseOffline,
+    GoogleLogout
+} from "react-google-login";
 import {GOOGLE_CLIENT_ID} from "@/constants/global-constants";
 import {useProfileStore} from "@/stores/profile-store";
 import {IProfile} from "@/interfaces/global-interfaces";
@@ -28,15 +33,17 @@ const Navbar = () => {
     };
 
     const onLoginSuccess = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-        if ("profileObj" in res) {
-            await setProfileData({
-                ...res.profileObj,
-                accessToken: res.accessToken
-            } as IProfile);
-            openNotification({
-                color: 'success',
-                content: 'Successfully Logged In!'
-            })
+        if (!profileData) {
+            if ("profileObj" in res) {
+                await setProfileData({
+                    ...res.profileObj,
+                    accessToken: res.accessToken
+                } as IProfile);
+                openNotification({
+                    color: 'success',
+                    content: 'Successfully Logged In!'
+                });
+            }
         }
     };
 
@@ -47,6 +54,10 @@ const Navbar = () => {
 
     const onLogout = async () => {
         await setProfileData(null);
+        openNotification({
+            color: 'info',
+            content: 'You have been logged out.'
+        });
     }
 
     return (
@@ -67,6 +78,67 @@ const Navbar = () => {
                 </div>
 
                 <div className="right-elements">
+                    <div className="login-container">
+                        { profileData
+                            ? <GoogleLogout
+                                className="logout-button"
+                                clientId={GOOGLE_CLIENT_ID}
+                                render={(renderedProps) => (
+                                    <Button
+                                        onClick={renderedProps.onClick}
+                                        sx={{
+                                            color: grey[100],
+                                            textTransform: 'none',
+                                            width: '100%',
+                                            justifyContent: 'flex-start',
+                                            border: `1px solid ${grey[100]}`,
+                                            backgroundColor: `rgba(0, 0, 0, 0.1)`
+                                        }}
+                                    >
+                                        <LockOutlined />
+                                        <div style={{ paddingLeft: '10px' }}>
+                                            Logout
+                                        </div>
+                                    </Button>
+                                )}
+                                onLogoutSuccess={onLogout}
+                            />
+                            : <GoogleLogin
+                                className="login-button"
+                                clientId={GOOGLE_CLIENT_ID}
+                                render={(renderedProps) => (
+                                    <Button
+                                        onClick={renderedProps.onClick}
+                                        sx={{
+                                            color: grey[100],
+                                            textTransform: 'none',
+                                            width: '100%',
+                                            justifyContent: 'flex-start',
+                                            border: `1px solid ${grey[100]}`,
+                                            backgroundColor: `rgba(0, 0, 0, 0.1)`
+                                        }}
+                                    >
+                                        <img
+                                            src={'/svgs/google.svg'}
+                                            alt="sign-in-icon"
+                                            style={{ width: '18px', height: '18px' }}
+                                        />
+                                        <div style={{ paddingLeft: '10px' }}>
+                                            Login with
+                                            <span style={{ marginLeft: '5px', color: red[400] }}>G</span>
+                                            <span style={{ color: orange[400] }}>oo</span>
+                                            <span style={{ color: green[400] }}>gl</span>
+                                            <span style={{ color: blue[400] }}>e</span>
+                                        </div>
+                                    </Button>
+                                )}
+                                onSuccess={onLoginSuccess}
+                                onFailure={onLoginFailure}
+                                cookiePolicy={'single_host_origin'}
+                                isSignedIn={true}
+                            />}
+                    </div>
+
                     <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => openModal('EMAIL')}>
                         <Email />
                     </IconButton>
@@ -74,6 +146,7 @@ const Navbar = () => {
                     <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 0 }} onClick={handleClick}>
                         <Settings />
                     </IconButton>
+
                     <Menu
                         id="fade-menu"
                         MenuListProps={{
@@ -97,68 +170,6 @@ const Navbar = () => {
                     >
                         <MenuItem onClick={handleClose} style={{ minHeight: '50px' }}>Profile</MenuItem>
                         <MenuItem onClick={handleClose} style={{ minHeight: '50px' }}>My account</MenuItem>
-                        <MenuItem onClick={handleClose} style={{
-                            minHeight: '50px',
-                            padding: '0 10px',
-                        }}>
-                            { profileData
-                                ? <GoogleLogout
-                                    className="logout-button"
-                                    clientId={GOOGLE_CLIENT_ID}
-                                    render={(renderedProps) => (
-                                        <Button
-                                            onClick={renderedProps.onClick}
-                                            sx={{
-                                                color: grey[900],
-                                                textTransform: 'none',
-                                                width: '100%',
-                                                justifyContent: 'flex-start',
-                                                padding: '0',
-                                                height: '50px'
-                                            }}
-                                        >
-                                            <LockOutlined />
-                                            <div style={{ paddingLeft: '10px' }}>
-                                                Logout
-                                            </div>
-                                        </Button>
-                                    )}
-                                    onLogoutSuccess={onLogout}
-                                />
-                                : <GoogleLogin
-                                    className="login-button"
-                                    clientId={GOOGLE_CLIENT_ID}
-                                    render={(renderedProps) => (
-                                        <Button
-                                            onClick={renderedProps.onClick}
-                                            sx={{
-                                                color: grey[900],
-                                                textTransform: 'none',
-                                                width: '100%',
-                                                justifyContent: 'flex-start',
-                                                height: '50px'
-                                            }}
-                                        >
-                                            <img
-                                                src={'/svgs/google.svg'}
-                                                alt="sign-in-icon"
-                                                style={{ width: '18px', height: '18px' }}
-                                            />
-                                            <div style={{ paddingLeft: '10px' }}>
-                                                Login with
-                                                <span style={{ marginLeft: '5px', color: red[400] }}>G</span>
-                                                <span style={{ color: orange[400] }}>oo</span>
-                                                <span style={{ color: green[400] }}>gl</span>
-                                                <span style={{ color: blue[400] }}>e</span>
-                                            </div>
-                                        </Button>
-                                    )}
-                                    onSuccess={onLoginSuccess}
-                                    onFailure={onLoginFailure}
-                                    cookiePolicy={'single_host_origin'}
-                                    isSignedIn={true}
-                                />}
-                        </MenuItem>
                     </Menu>
                 </div>
             </Toolbar>

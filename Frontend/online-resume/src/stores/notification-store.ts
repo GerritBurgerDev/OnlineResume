@@ -37,7 +37,7 @@ export const useNotificationStore = create<INotificationStore>((set) => ({
                 ...config,
                 isOpen: true,
                 ...(!config.position && { position: { vertical: 'top', horizontal: 'center'}}),
-                ...(!config.timeout && { timeout: 5000 })
+                ...(!config.timeout && { timeout: 3000 })
             }
         }));
     },

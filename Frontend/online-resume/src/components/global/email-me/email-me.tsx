@@ -5,6 +5,7 @@ import {grey} from "@mui/material/colors";
 import {styled} from '@mui/material/styles';
 import emailjs from 'emailjs-com';
 import {useNotificationStore} from "@/stores/notification-store";
+import {useProfileStore} from "@/stores/profile-store";
 
 const CustomTextField = styled(TextField)({
     '& label': {
@@ -24,6 +25,7 @@ const CustomTextField = styled(TextField)({
 const EmailMe = () => {
     const EMAIL_DEBOUNCE_TIME = 300; // 5 Minutes
     const { openNotification } = useNotificationStore((state) => state);
+    const { profileData } = useProfileStore((state) => state);
 
     const [hasClickedSend, setHasClickedSend] = useState<boolean>(false);
     const [emailDetails, setEmailDetails] = useState({
@@ -98,8 +100,9 @@ const EmailMe = () => {
                 helperText={(hasClickedSend && !emailDetails.name) && 'This field is required'}
                 id="standard-textarea"
                 label="Full Name"
-                placeholder="Enter your name"
+                placeholder={!profileData ? 'Enter your email' : ''}
                 multiline
+                defaultValue={profileData?.email}
                 variant="standard"
                 onChange={(e) => setDetails('name', e.target.value)}
             />
@@ -108,8 +111,9 @@ const EmailMe = () => {
                 helperText={(hasClickedSend && !validateEmail(emailDetails.email)) && 'This is not a valid email address.'}
                 id="standard-textarea"
                 label="Email"
-                placeholder="Placeholder"
+                placeholder={!profileData ? 'Enter your name' : ''}
                 multiline
+                defaultValue={profileData?.name}
                 variant="standard"
                 onChange={(e) => setDetails('email', e.target.value)}
             />
