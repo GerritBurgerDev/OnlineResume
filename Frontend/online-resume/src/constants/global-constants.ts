@@ -50,3 +50,5 @@ export const SELECTED_SKILL_ALL: TechSkill = {
     experienceDuration: '',
     confidence: 0
 }
+
+export const GOOGLE_CLIENT_ID = '623967861794-7q115le8urmivuke5tik7aj5jr63h17r.apps.googleusercontent.com';

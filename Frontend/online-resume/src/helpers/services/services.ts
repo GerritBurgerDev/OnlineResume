@@ -6,4 +6,5 @@ export const projectClientService = new ProjectClientService();
 
 export const updateAuthToken = (token: string) => {
     globalServiceClient.updateAuthToken(token);
+    projectClientService.updateAuthToken(token);
 }

@@ -16,6 +16,9 @@ import {useNotificationStore} from "@/stores/notification-store";
 import NotificationWrapper from "@/components/global/notification-wrapper/notification-wrapper";
 import Experience from "@/pages/experience/experience";
 import {useProjectsStore} from "@/stores/project-store";
+import { gapi } from 'gapi-script';
+import {GOOGLE_CLIENT_ID} from "@/constants/global-constants";
+import {useProfileStore} from "@/stores/profile-store";
 
 function App() {
   const router = createBrowserRouter([
@@ -30,7 +33,7 @@ function App() {
     },
     {
       path: "/about-me",
-      element: <div>Some test 2 sdf</div>
+      element: <div>About Me Section</div>
     }
   ]);
 
@@ -40,7 +43,18 @@ function App() {
       mountStoreDevtool('NotificationStore', useNotificationStore);
       mountStoreDevtool('ModalStore', useModalStore);
       mountStoreDevtool('ProjectStore', useProjectsStore);
+      mountStoreDevtool('ProfileStore', useProfileStore);
     }
+
+    const initClient = () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      gapi.client.init({
+        clientId: GOOGLE_CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/userinfo.email'
+      });
+    };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+    gapi.load('client:auth2', initClient);
   }, []);
 
   return (

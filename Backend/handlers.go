@@ -55,7 +55,7 @@ func AddRecommendation(writer http.ResponseWriter, request *http.Request) {
 	collection.FindOne(context.TODO(), bson.D{{}}, filters).Decode(&lastItem)
 
 	recommendation.Id = lastItem.Id + 1
-	result := Helpers.AddSingleDocument(collection, recommendation)
+	result := Helpers.AddSingleDocument(client, "OnlineResume", "Recommendations", recommendation)
 
 	json.NewEncoder(writer).Encode(result)
 }
@@ -78,6 +78,9 @@ func GetProject(writer http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(writer).Encode(result)
 }
 
+// GetProjectsForSkill is a GET method
+// Vars include {skill: string}
+// returns all projects that used the given skill
 func GetProjectsForSkill(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	skill, _ := vars["skill"]
@@ -124,6 +127,63 @@ func GetCommonData(writer http.ResponseWriter, request *http.Request) {
 	result := Helpers.GetFromCollection(client, "OnlineResume", "GlobalData")
 
 	json.NewEncoder(writer).Encode(result[0])
+}
+
+// CreateUser is a POSt meethod
+// Creates a user if they don't exist
+// returns global data object
+func CreateUser(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "application/json")
+	var user Structs.User
+	json.NewDecoder(request.Body).Decode(&user)
+
+	optLastItem := bson.M{
+		"sorting": []bson.M{
+			{"endDate": -1},
+			{"id": -1},
+		},
+	}
+
+	optUser := bson.M{
+		"sorting": []bson.M{
+			{"endDate": -1},
+			{"id": -1},
+		},
+		"filters": []bson.M{
+			{"email": user.Email},
+		},
+	}
+
+	lastItemBson := Helpers.GetSingleFromCollection(client, "OnlineResume", "Users", optLastItem)
+	var lastItem Structs.User
+	bsonBytes, _ := bson.Marshal(lastItemBson)
+	bson.Unmarshal(bsonBytes, &lastItem)
+
+	result := Helpers.GetSingleFromCollection(client, "OnlineResume", "Users", optUser)
+
+	if result["StatusCode"] == 404 {
+		user.Id = lastItem.Id + 1
+		res := Helpers.AddSingleDocument(client, "OnlineResume", "Users", user)
+		json.NewEncoder(writer).Encode(res)
+
+		return
+	} else {
+		update := bson.D{{
+			"$set",
+			bson.M{
+				"accessToken": user.AccessToken,
+				"imageUrl":    user.ImageUrl,
+				"isAdmin":     user.IsAdmin,
+			},
+		}}
+
+		res := Helpers.UpsertSingleDocument(client, "OnlineResume", "Users", update, optUser)
+		json.NewEncoder(writer).Encode(res)
+
+		return
+	}
+
+	json.NewEncoder(writer).Encode(result)
 }
 
 // RootCall is a GET method

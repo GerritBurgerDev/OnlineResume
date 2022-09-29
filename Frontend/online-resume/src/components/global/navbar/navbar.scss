@@ -53,6 +53,12 @@
   }
 
   .right-elements {
+    display: flex;
+
+    .login-container {
+        margin-right: 25px;
+    }
+
     @media (max-width: 800px) {
       flex: 1;
       display: flex;

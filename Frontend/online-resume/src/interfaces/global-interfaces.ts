@@ -24,6 +24,14 @@ export interface TechSkill {
     confidence: number
 }
 
+export interface IProfile {
+    email: string,
+    imageUrl: string,
+    name: string,
+    accessToken: string,
+    isAdmin?: boolean
+}
+
 export interface Recommendation {
     author: string,
     relationship: string,

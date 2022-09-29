@@ -20,6 +20,7 @@ var ctx context.Context
 func handleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", RootCall).Methods("GET")
+	router.HandleFunc("/signin", CreateUser).Methods("POST")
 	router.HandleFunc("/common-data", GetCommonData).Methods("GET")
 	router.HandleFunc("/projects", GetAllProjects).Methods("GET")
 	router.HandleFunc("/projects/{skill}", GetProjectsForSkill).Methods("GET")
