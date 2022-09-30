@@ -1,0 +1,66 @@
+@import "@/assets/css/colors.scss";
+
+.recommendations-page {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+
+  &-my-recommendations {
+    padding: 20px;
+    background-color: $dark-color-darker;
+    box-shadow: 0 1px 10px 5px rgba(black, 0.3);
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h1 {
+        margin: 0;
+      }
+    }
+
+    .container {
+      margin-top: 20px;
+
+      h3 {
+        margin: 0;
+        font-weight: 400;
+      }
+    }
+  }
+
+  &-all-recommendations {
+    padding: 20px;
+    background-color: $dark-color-darker;
+    box-shadow: 0 1px 10px 5px rgba(black, 0.3);
+
+    .header {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h1 {
+        margin: 0;
+      }
+    }
+
+    .container {
+      margin-top: 40px;
+
+      h3 {
+        margin: 0;
+        font-weight: 400;
+      }
+
+      .recommendation {
+        transition: .2s ease-in-out;
+
+        &:hover {
+          transform: scale(1.02);
+        }
+      }
+    }
+  }
+}

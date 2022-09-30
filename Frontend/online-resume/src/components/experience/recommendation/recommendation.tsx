@@ -27,7 +27,7 @@ const Recommendation = (props: IRecommendationProps) => {
           </div>
           <div className="recommendation-project-details">
               {
-                  props.projectName ? <h2>{props.projectName}</h2> : ''
+                  props.projectName ? <h3>{props.projectName}</h3> : ''
               }
               {
                   props.projectName ? <h4>{props.projectPosition}</h4> : ''

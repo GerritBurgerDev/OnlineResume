@@ -15,6 +15,7 @@ import {useProfileStore} from "@/stores/profile-store";
 import {IProfile} from "@/interfaces/global-interfaces";
 import {grey, red, orange, blue, green} from "@mui/material/colors";
 import {useNotificationStore} from "@/stores/notification-store";
+import {MODAL_TYPE_EMAIL} from "@/constants/modal-constants";
 
 const Navbar = () => {
     const { openModal } = useModalStore((state) => state);
@@ -139,7 +140,7 @@ const Navbar = () => {
                             />}
                     </div>
 
-                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => openModal('EMAIL')}>
+                    <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => openModal(MODAL_TYPE_EMAIL)}>
                         <Email />
                     </IconButton>
 

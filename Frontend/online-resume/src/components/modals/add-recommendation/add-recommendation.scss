@@ -1,0 +1,12 @@
+@import "@/assets/css/colors.scss";
+
+.add-recommendation-modal {
+  min-width: 600px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+  h2 {
+    margin-top: 5px;
+  }
+}

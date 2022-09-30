@@ -19,6 +19,7 @@ import {useProjectsStore} from "@/stores/project-store";
 import { gapi } from 'gapi-script';
 import {GOOGLE_CLIENT_ID} from "@/constants/global-constants";
 import {useProfileStore} from "@/stores/profile-store";
+import Recommendations from "@/pages/recommendations/recommendations";
 
 function App() {
   const router = createBrowserRouter([
@@ -30,6 +31,10 @@ function App() {
     {
       path: "/projects",
       element: <Experience />
+    },
+    {
+      path: "/recommendations",
+      element: <Recommendations />
     },
     {
       path: "/about-me",

@@ -42,3 +42,8 @@ export interface Recommendation {
     rating: number,
     timestamp: number
 }
+
+export interface ISelectItem {
+    label: string,
+    value: string
+}
