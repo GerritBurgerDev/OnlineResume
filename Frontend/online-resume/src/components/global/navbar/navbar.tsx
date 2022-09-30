@@ -61,7 +61,7 @@ const Navbar = () => {
     }
 
     return (
-        <AppBar position="static" className="navbar">
+        <AppBar position="sticky" className="navbar">
             <Toolbar>
                 <div className="left-elements">
                     <h3>
@@ -168,7 +168,7 @@ const Navbar = () => {
                             }
                         }}
                     >
-                        <MenuItem onClick={handleClose} style={{ minHeight: '50px' }}>Profile</MenuItem>
+                        <MenuItem onClick={handleClose} style={{ minHeight: '50px' }}>My Recommendations</MenuItem>
                         <MenuItem onClick={handleClose} style={{ minHeight: '50px' }}>My account</MenuItem>
                     </Menu>
                 </div>

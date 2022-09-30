@@ -4,17 +4,34 @@ import {Avatar, Rating} from "@mui/material";
 import {IRecommendation} from "@/interfaces/project-interfaces";
 import {yellow} from "@mui/material/colors";
 
-const Recommendation = (props: IRecommendation) => {
+interface IRecommendationProps extends IRecommendation {
+    projectName?: string,
+    projectPosition?: string
+}
+
+const Recommendation = (props: IRecommendationProps) => {
     return (
       <div className="recommendation">
           <div className="recommendation-avatar-container">
-              <Avatar alt={props.author} sx={{ width: 80, height: 80, fontSize: 30, backgroundColor: yellow[700]  }}>
-                  {
-                      props.author.split(' ').map(word => {
-                          return word.charAt(0);
-                      }).join('')
-                  }
-              </Avatar>
+              {
+                  props.authorAvatar ?
+                      <img src={props.authorAvatar} alt="author-avatar" style={{ width: 80, height: 80 }}/> :
+                      <Avatar alt={props.author} sx={{ width: 80, height: 80, fontSize: 30, backgroundColor: yellow[700]  }}>
+                          {
+                              props.author.split(' ').map(word => {
+                                  return word.charAt(0);
+                              }).join('')
+                          }
+                      </Avatar>
+              }
+          </div>
+          <div className="recommendation-project-details">
+              {
+                  props.projectName ? <h2>{props.projectName}</h2> : ''
+              }
+              {
+                  props.projectName ? <h4>{props.projectPosition}</h4> : ''
+              }
           </div>
           <div className="recommendation-description-container">
               &quot;{props.content}&quot;

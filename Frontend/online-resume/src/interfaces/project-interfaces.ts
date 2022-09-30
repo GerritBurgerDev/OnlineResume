@@ -13,6 +13,7 @@ export interface IProject {
 export interface IRecommendation {
     id?: number,
     author: string,
+    authorAvatar?: string,
     relationship: string,
     content: string,
     rating: number,

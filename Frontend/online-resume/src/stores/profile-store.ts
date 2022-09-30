@@ -28,14 +28,14 @@ export const useProfileStore = create<IProfileStore>(
                 if (data) {
                     try {
                         await globalServiceClient.login(data);
-
-                        set(() => ({
-                            profileData: data
-                        }));
                     } catch (exception) {
                         console.log(exception)
                     }
                 }
+
+                set(() => ({
+                    profileData: data
+                }));
             }
         }),
         { name: 'profile-store' }

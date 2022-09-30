@@ -109,6 +109,7 @@ const Project = (props: IProject)  => {
                     <AccordionSummary
                         className="accordion-header"
                         expandIcon={<ExpandMore />}
+                        disabled={props.name === 'OnlineResume'}
                         aria-controls="recommendations-content"
                         id="recommendations-header"
                     >
@@ -116,7 +117,7 @@ const Project = (props: IProject)  => {
                             Recommendations
                         </div>
                         {
-                            recommendations.length === 0 ?
+                            (recommendations.length === 0 || props.name === 'OnlineResume') ?
                                 <div className="sub-title subtle">No recommendations for this project</div>
                                 : null
                         }
@@ -130,6 +131,8 @@ const Project = (props: IProject)  => {
                                             <Recommendation
                                                 key={recommendation.id}
                                                 {...recommendation}
+                                                projectName={props.name}
+                                                projectPosition={props.position}
                                             />
                                         )
                                     })
