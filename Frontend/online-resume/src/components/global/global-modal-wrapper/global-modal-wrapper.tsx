@@ -6,8 +6,11 @@ import {Close} from "@mui/icons-material";
 import EmailMe from "@/components/modals/email-me/email-me";
 import {MODAL_TYPE_ADD_RECOMMENDATION, MODAL_TYPE_EMAIL} from "@/constants/modal-constants";
 import AddRecommendation from "@/components/modals/add-recommendation/add-recommendation";
+import {useProfileStore} from "@/stores/profile-store";
+import SignInRequired from "@/components/modals/sign-in-required/sign-in-required";
 
 const GlobalModalWrapper = () => {
+    const { profileData } = useProfileStore((state) => state);
     const { modalType, closeModal } = useModalStore((state) => state);
 
     const handleClose = () => {
@@ -19,6 +22,10 @@ const GlobalModalWrapper = () => {
             case MODAL_TYPE_EMAIL:
                 return <EmailMe />;
             case MODAL_TYPE_ADD_RECOMMENDATION:
+                if (!profileData) {
+                    return <SignInRequired />;
+                }
+
                 return <AddRecommendation />;
         }
     }

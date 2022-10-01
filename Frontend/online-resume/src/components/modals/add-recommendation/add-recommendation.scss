@@ -9,4 +9,19 @@
   h2 {
     margin-top: 5px;
   }
+
+  p {
+    margin-top: 0;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 8px;
+    margin-top: 10px;
+
+    button {
+      background-color: $red-color-dark;
+    }
+  }
 }

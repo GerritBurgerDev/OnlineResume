@@ -1,26 +1,10 @@
 import React, {useState} from 'react';
 import "./email-me.scss";
-import {Button, Icon, TextField} from "@mui/material";
-import {grey} from "@mui/material/colors";
-import {styled} from '@mui/material/styles';
+import {Button, Icon} from "@mui/material";
 import emailjs from 'emailjs-com';
 import {useNotificationStore} from "@/stores/notification-store";
 import {useProfileStore} from "@/stores/profile-store";
-
-const CustomTextField = styled(TextField)({
-    '& label': {
-        color: grey[500],
-    },
-    '& .MuiInput-root': {
-        color: grey[300],
-    },
-    '& .MuiInput-root:hover::before': {
-        borderBottomColor: grey[300],
-    },
-    '& .MuiInput-underline:before': {
-        borderBottomColor: grey[300],
-    },
-});
+import CustomInput from "@/components/util/Inputs/CustomInput/custom-input";
 
 const EmailMe = () => {
     const EMAIL_DEBOUNCE_TIME = 300; // 5 Minutes
@@ -95,36 +79,32 @@ const EmailMe = () => {
         <div className="email-me">
             <h1>Contact Me</h1>
 
-            <CustomTextField
+            <CustomInput
                 error={hasClickedSend && !emailDetails.name}
                 helperText={(hasClickedSend && !emailDetails.name) && 'This field is required'}
                 id="standard-textarea"
                 label="Full Name"
-                placeholder={!profileData ? 'Enter your email' : ''}
-                multiline
-                defaultValue={profileData?.email}
-                variant="standard"
+                placeholder={!profileData ? 'Enter your full name' : ''}
+                defaultValue={profileData?.name}
+                // variant="standard"
                 onChange={(e) => setDetails('name', e.target.value)}
             />
-            <CustomTextField
+            <CustomInput
                 error={hasClickedSend && !validateEmail(emailDetails.email)}
                 helperText={(hasClickedSend && !validateEmail(emailDetails.email)) && 'This is not a valid email address.'}
                 id="standard-textarea"
                 label="Email"
-                placeholder={!profileData ? 'Enter your name' : ''}
-                multiline
-                defaultValue={profileData?.name}
-                variant="standard"
+                placeholder={!profileData ? 'Enter your email' : ''}
+                defaultValue={profileData?.email}
                 onChange={(e) => setDetails('email', e.target.value)}
             />
-            <CustomTextField
+            <CustomInput
                 error={hasClickedSend && !emailDetails.message}
                 helperText={(hasClickedSend && !emailDetails.message) && 'Please enter the message you would like to send.'}
                 id="standard-multiline-static"
                 label="Message"
                 multiline
                 rows={6}
-                variant="standard"
                 onChange={(e) => setDetails('message', e.target.value)}
             />
 

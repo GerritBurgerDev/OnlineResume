@@ -1,6 +1,16 @@
-import {alpha, FormControl, InputBase, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
-import {blue, grey} from "@mui/material/colors";
-import React, {CSSProperties} from "react";
+import {
+    alpha,
+    FormControl,
+    FormHelperText,
+    InputBase,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    SelectProps
+} from "@mui/material";
+import {blue, grey, red} from "@mui/material/colors";
+import React, {CSSProperties, ReactNode} from "react";
 import {makeStyles} from "@mui/styles";
 import {styled} from "@mui/material/styles";
 import {ISelectItem} from "@/interfaces/global-interfaces";
@@ -16,6 +26,9 @@ const CustomInput = styled(InputBase)(({ theme }) => ({
     '&:not(.Mui-focused)': {
         border: `1px solid ${grey[100]}`,
         borderRadius: 4,
+    },
+    '&.Mui-error': {
+        border: `2px solid ${red[700]}`,
     },
     '&.Mui-focused': {
         border: `2px solid ${blue[600]}`,
@@ -50,12 +63,11 @@ const useStyles = makeStyles({
     }
 });
 
-interface ICustomSelectProps {
+interface ICustomSelectProps extends SelectProps {
     items: ISelectItem[],
     style?: CSSProperties,
-    label: string,
-    value: string,
-    onChange: (event: SelectChangeEvent) => void
+    helperText?: ReactNode,
+    onSelectChange: (event: SelectChangeEvent) => void
 }
 
 const CustomSelect = (props: ICustomSelectProps) => {
@@ -82,14 +94,21 @@ const CustomSelect = (props: ICustomSelectProps) => {
             <Select
                 labelId="demo-simple-select-helper-label"
                 id="demo-simple-select-helper"
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 value={props.value}
-                onChange={(e: SelectChangeEvent) => props.onChange(e)}
-                input={<CustomInput />}
+                onChange={(e: SelectChangeEvent) => props.onSelectChange(e)}
+                input={<CustomInput error={props.error} />}
+                multiple={props.multiple}
                 MenuProps={{ classes: { paper: classes.select } }}
             >
-                <MenuItem value="">
-                    <em>None</em>
-                </MenuItem>
+                {
+                    !props.multiple && (
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                    )
+                }
                 {
                     props.items.map((item: ISelectItem) => {
                         return (
@@ -98,6 +117,13 @@ const CustomSelect = (props: ICustomSelectProps) => {
                     })
                 }
             </Select>
+            {
+                props.helperText && (
+                    <FormHelperText style={{ color: `${props.error ? red[700] : grey[100]}`}}>
+                        {props.helperText}
+                    </FormHelperText>
+                )
+            }
         </FormControl>
     )
 }

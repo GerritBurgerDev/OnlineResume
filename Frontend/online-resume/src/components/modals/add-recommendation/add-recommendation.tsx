@@ -1,95 +1,156 @@
-import React, {useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import "./add-recommendation.scss";
-import {alpha, SelectChangeEvent, SxProps, TextField} from "@mui/material";
+import {Button, Icon, SelectChangeEvent} from "@mui/material";
 import CustomSelect from "@/components/util/Inputs/CustomSelect/custom-select";
 import {ISelectItem} from "@/interfaces/global-interfaces";
-import {blue, grey} from "@mui/material/colors";
-
-const customTextSxProps: SxProps = {
-    margin: '8px',
-    "& label": {
-        top: '-4px',
-        color: alpha(grey[100], 0.5),
-        "&.Mui-focused": {
-            top: '0',
-        }
-    },
-    "& textarea": {
-      margin: '-12px -14px'
-    },
-    "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-        borderColor: blue[700]
-    },
-    "& .MuiInputBase-input": {
-        color: grey[100],
-        padding: '12px 14px',
-    },
-    "& .MuiOutlinedInput-notchedOutline": {
-        borderColor: grey[100]
-    }
-}
+import CustomInput from "@/components/util/Inputs/CustomInput/custom-input";
+import {useProjectsStore} from "@/stores/project-store";
+import {IProject} from "@/interfaces/project-interfaces";
+import _ from "lodash";
+import {useProfileStore} from "@/stores/profile-store";
 
 const AddRecommendation = () => {
-    const items: ISelectItem[] = [
-        {
-            label: 'Some Project 1',
-            value: 'Some Project 1'
-        },
-        {
-            label: 'Some Project 2',
-            value: 'Some Project 2'
-        },
-        {
-            label: 'Some Project 3',
-            value: 'Some Project 3'
-        }
-    ]
-    const [project, setProject] = useState<string>('');
+    const { profileData } = useProfileStore((state) => state);
+    const { projects, getAllProjects } = useProjectsStore((state) => state);
+    const [projectItems, setProjectitems] = useState<ISelectItem[]>([]);
+
+    const [modalLoading, setModalLoading] = useState(false);
+
+    const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
+    const [position, setPosition] = useState<string>('');
+    const [recommendation, setRecommendation] = useState<string>('');
+    const [yourName, setYourName] = useState<string | null>('');
+    const [relationship, setRelationship] = useState<string>('');
 
     const handleProjectChange = (event: SelectChangeEvent) => {
-        setProject(event.target.value);
+        const {
+            target: { value },
+        } = event;
+
+        setSelectedProjects(
+            typeof value === 'string' ? value.split(',') : value,
+        );
     };
 
+    const handlePositionChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setPosition(event.target.value);
+    }
+
+    const handleRecommendationChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setRecommendation(event.target.value);
+    }
+
+    const handleYourNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setYourName(event.target.value);
+    }
+
+    const handleRelationshipChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setRelationship(event.target.value);
+    }
+
+    useEffect(() => {
+        setModalLoading(true);
+
+        const fetchProjects = async () => {
+            await getAllProjects();
+        }
+
+        fetchProjects().catch(() => { /* DONE */ });
+
+        const items: ISelectItem[] = projects.map((project: IProject) => {
+            return {
+                label: project.name,
+                value: project.name
+            }
+        });
+
+        setProjectitems(_.sortBy(items, 'label'));
+        setYourName(profileData?.name || '');
+
+        setModalLoading(false);
+    }, []);
+
+    const [hasClickedSubmit, setHasClickedSubmit] = useState(false);
+
+    const handleSubmit = () => {
+        setHasClickedSubmit(true);
+
+        if (selectedProjects.length === 0 || !position || !yourName || !relationship || !recommendation) {
+            return;
+        }
+    }
+
     return (
-        <div className="add-recommendation-modal">
+        <div className="add-recommendation-modal fade-in--1s">
             <h2>Add recommendation</h2>
 
-            <CustomSelect
-                style={{ width: '300px' }}
-                label="Select Project"
-                items={items}
-                value={project}
-                onChange={(e: SelectChangeEvent) => handleProjectChange(e)}
-            />
-            <TextField
-                style={{ width: '300px' }}
-                sx={customTextSxProps}
-                id="my-position"
-                label="My Position"
-                variant="outlined"
-            />
-            <TextField
-                sx={customTextSxProps}
-                id="recommendation-text"
-                label="Recommendation"
-                variant="outlined"
-                multiline
-                rows={6}
-            />
-            <TextField
-                style={{ width: '300px' }}
-                sx={customTextSxProps}
-                id="your-name"
-                label="Your Name"
-                variant="outlined"
-            />
-            <TextField
-                style={{ width: '300px' }}
-                sx={customTextSxProps}
-                id="relationship"
-                label="Relationship"
-                variant="outlined"
-            />
+            {
+                modalLoading ?
+                    <div>Loading...</div> :
+                    (
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <p>
+                                <b>Please note: </b> Your recommendation will be in a pending state until approved.
+                            </p>
+
+                            <CustomSelect
+                                error={hasClickedSubmit && selectedProjects.length === 0}
+                                helperText={(hasClickedSubmit && selectedProjects.length === 0) && 'Please select the projects for the recommendation.'}
+                                style={{ width: '300px' }}
+                                label="Select Project"
+                                items={projectItems}
+                                multiple
+                                value={selectedProjects}
+                                onSelectChange={handleProjectChange}
+                            />
+                            <CustomInput
+                                error={hasClickedSubmit && !yourName}
+                                helperText={(hasClickedSubmit && !yourName) && 'Please specify your name.'}
+                                style={{ width: '300px' }}
+                                id="your-name"
+                                label="Your Name"
+                                variant="outlined"
+                                defaultValue={profileData?.name}
+                                onChange={handleYourNameChange}
+                            />
+                            <CustomInput
+                                error={hasClickedSubmit && !position}
+                                helperText={(hasClickedSubmit && !position) && 'Please specify my position at the time.'}
+                                style={{ width: '300px' }}
+                                id="my-position"
+                                label="My Position"
+                                variant="outlined"
+                                onChange={handlePositionChange}
+                            />
+                            <CustomInput
+                                error={hasClickedSubmit && !relationship}
+                                helperText={(hasClickedSubmit && !relationship) && 'Please specify your position at the time.'}
+                                style={{ width: '300px' }}
+                                id="your-position"
+                                label="Your Position"
+                                variant="outlined"
+                                onChange={handleRelationshipChange}
+                            />
+                            <CustomInput
+                                error={hasClickedSubmit && !recommendation}
+                                helperText={(hasClickedSubmit && !recommendation) && 'Please take some time to fill out the recommendation.'}
+                                id="recommendation-text"
+                                label="Recommendation"
+                                variant="outlined"
+                                multiline
+                                rows={6}
+                                onChange={handleRecommendationChange}
+                            />
+
+                            <div className="actions">
+                                <Button variant="contained" onClick={handleSubmit}>
+                                    <Icon>add</Icon>
+                                    Submit
+                                </Button>
+                            </div>
+                        </div>
+                    )
+            }
         </div>
     );
 }
