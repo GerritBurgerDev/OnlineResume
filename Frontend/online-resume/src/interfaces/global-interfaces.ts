@@ -29,7 +29,7 @@ export interface IProfile {
     imageUrl: string,
     name: string,
     accessToken: string,
-    isAdmin?: boolean
+    isAdmin?: boolean,
 }
 
 export interface Recommendation {
@@ -40,7 +40,8 @@ export interface Recommendation {
     id: number,
     positionAtTheTime: string,
     rating: number,
-    timestamp: number
+    timestamp: number,
+    state: string
 }
 
 export interface ISelectItem {

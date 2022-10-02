@@ -1,5 +1,5 @@
 import {ICommonData, IProfile} from "@/interfaces/global-interfaces";
-import {IProject} from "@/interfaces/project-interfaces";
+import {IProject, IRecommendation} from "@/interfaces/project-interfaces";
 
 export interface ApiConfig {
     accessToken?: string
@@ -18,4 +18,5 @@ export interface IGlobalClient {
 export interface IProjectClient {
     getAllProjects(): Promise<IProject[] | undefined>
     getProjectsForSkill(skillName: string): Promise<IProject[] | undefined>
+    getAllRecommendations(): Promise<IRecommendation[] | undefined>
 }

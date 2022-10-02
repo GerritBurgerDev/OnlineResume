@@ -1,17 +1,47 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import "./recommendation.scss";
-import {Avatar, Rating} from "@mui/material";
+import {Avatar, IconButton, Rating} from "@mui/material";
 import {IRecommendation} from "@/interfaces/project-interfaces";
-import {yellow} from "@mui/material/colors";
+import {grey, yellow} from "@mui/material/colors";
+import _ from "lodash";
+import {useProfileStore} from "@/stores/profile-store";
+import {Edit} from "@mui/icons-material";
+import {useModalStore} from "@/stores/modal-store";
+import {MODAL_TYPE_ADD_RECOMMENDATION} from "@/constants/modal-constants";
+import {RECOMMENDATION_STATE_PENDING} from "@/constants/project-constants";
 
 interface IRecommendationProps extends IRecommendation {
     projectName?: string,
-    projectPosition?: string
+    projectPosition?: string,
+    displayState?: boolean
 }
 
 const Recommendation = (props: IRecommendationProps) => {
+    const { profileData } = useProfileStore((state) => state);
+    const { openModal } = useModalStore((state) => state);
+
+    const renderRecommendationState = (): ReactNode => {
+        if (!props.displayState) return null;
+
+        return (
+            <div className={`recommendation-state-button ${props.state}`}>
+                {_.upperFirst(props.state)}
+            </div>
+        )
+    }
+
+    const editRecommendation = () => {
+        openModal(MODAL_TYPE_ADD_RECOMMENDATION, props);
+    }
+
     return (
       <div className="recommendation">
+          <div className="recommendation-state">
+              {
+                  renderRecommendationState()
+              }
+          </div>
+
           <div className="recommendation-avatar-container">
               {
                   props.authorAvatar ?
@@ -25,6 +55,17 @@ const Recommendation = (props: IRecommendationProps) => {
                       </Avatar>
               }
           </div>
+
+          {
+              profileData && props.authorId === profileData.email && props.state === RECOMMENDATION_STATE_PENDING ?
+                  <div className="edit-button">
+                      <IconButton sx={{ color: grey[100] }} onClick={editRecommendation}>
+                          <Edit/>
+                      </IconButton>
+                  </div> :
+                  null
+          }
+
           <div className="recommendation-project-details">
               {
                   props.projectName ? <h3>{props.projectName}</h3> : ''

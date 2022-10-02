@@ -11,13 +11,15 @@ import SignInRequired from "@/components/modals/sign-in-required/sign-in-require
 
 const GlobalModalWrapper = () => {
     const { profileData } = useProfileStore((state) => state);
-    const { modalType, closeModal } = useModalStore((state) => state);
+    const { modalType, modalData, closeModal } = useModalStore((state) => state);
 
     const handleClose = () => {
         closeModal();
     }
 
     const displayModal = () => {
+        let data;
+
         switch (modalType) {
             case MODAL_TYPE_EMAIL:
                 return <EmailMe />;
@@ -26,7 +28,9 @@ const GlobalModalWrapper = () => {
                     return <SignInRequired />;
                 }
 
-                return <AddRecommendation />;
+                data = modalData || {};
+
+                return <AddRecommendation {...data} isEdit={!!modalData} />;
         }
     }
 

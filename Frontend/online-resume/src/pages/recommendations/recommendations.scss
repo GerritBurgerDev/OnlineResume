@@ -27,6 +27,14 @@
         margin: 0;
         font-weight: 400;
       }
+
+      .recommendation {
+        transition: .2s ease-in-out;
+
+        &:hover {
+          transform: scale(1.02);
+        }
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./recommendations.scss";
 import {Button} from "@mui/material";
 import {red} from "@mui/material/colors";
@@ -6,16 +6,25 @@ import {Add} from "@mui/icons-material";
 import {IProject, IRecommendation} from "@/interfaces/project-interfaces";
 import Recommendation from "@/components/experience/recommendation/recommendation";
 import Masonry from "@mui/lab/Masonry";
-import {TEMP_RECOMMENDATIONS} from "@/constants/global-constants";
 import {useProjectsStore} from "@/stores/project-store";
 import {useModalStore} from "@/stores/modal-store";
 import {MODAL_TYPE_ADD_RECOMMENDATION} from "@/constants/modal-constants";
+import {useProfileStore} from "@/stores/profile-store";
 
 const Recommendations = () => {
-    const { projects } = useProjectsStore((state) => state);
+    const { profileData } = useProfileStore((state) => state);
+    const { projects, getAllProjects, recommendations, getAllRecommendations, getPostedRecommendations } = useProjectsStore((state) => state);
     const { openModal } = useModalStore((state) => state);
 
-    const [recommendations, setRecommendations] = useState<IRecommendation[]>(TEMP_RECOMMENDATIONS);
+    useEffect(() => {
+        getAllProjects().catch(() => { /* Called */ });
+        getAllRecommendations().then(() => {
+            setMyRecommendations(recommendations.filter(recommendation => recommendation.authorId === profileData?.email));
+        }).catch(() => { /* Called */ });
+
+    }, [profileData]);
+
+    const [myRecommendations, setMyRecommendations] = useState<IRecommendation[]>([]);
 
     const getProject = (id: number): IProject | undefined => {
         return projects.find((project: IProject) => project.id === id);
@@ -40,7 +49,25 @@ const Recommendations = () => {
                     </Button>
                 </div>
                 <div className="container">
-                    <h3>No recommendations yet. Maybe add one?</h3>
+                    {
+                        myRecommendations.length > 0 ?
+                            <Masonry columns={{ xs: 1, sm: 3, md: 4 }} spacing={2}>
+                                {
+                                    myRecommendations.map((recommendation: IRecommendation) => {
+                                        return (
+                                            <Recommendation
+                                                key={recommendation.id}
+                                                {...recommendation}
+                                                projectName={getProject(recommendation.projectId)?.name}
+                                                projectPosition={getProject(recommendation.projectId)?.position}
+                                                displayState
+                                            />
+                                        )
+                                    })
+                                }
+                            </Masonry> :
+                            <h3>No recommendations yet. Maybe add one?</h3>
+                    }
                 </div>
             </div>
 
@@ -52,7 +79,7 @@ const Recommendations = () => {
                 <div className="container">
                     <Masonry columns={{ xs: 1, sm: 3, md: 4 }} spacing={2}>
                         {
-                            recommendations.map((recommendation: IRecommendation) => {
+                            getPostedRecommendations().map((recommendation: IRecommendation) => {
                                 return (
                                     <Recommendation
                                         key={recommendation.id}

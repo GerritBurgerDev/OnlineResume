@@ -46,9 +46,10 @@ const useStyles = makeStyles({
         borderRadius: 4,
         "& ul": {
             backgroundColor: grey[700],
+            maxHeight: '200px'
         },
         "& li": {
-            fontSize: 15,
+            fontSize: 16,
             color: grey[100],
             "&:hover": {
                 backgroundColor: alpha(grey[900], 0.3),

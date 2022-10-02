@@ -38,6 +38,9 @@ export const useProfileStore = create<IProfileStore>(
                 }));
             }
         }),
-        { name: 'profile-store' }
+        {
+            name: 'profile-store',
+            getStorage: () => sessionStorage
+        }
     )
 )

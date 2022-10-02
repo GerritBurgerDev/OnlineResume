@@ -5,6 +5,8 @@ import CircularProgressBar from "@/components/util/progress/circular-progress-ba
 import React from "react";
 import {TechSkill} from "@/interfaces/global-interfaces";
 import {IProject} from "@/interfaces/project-interfaces";
+import CustomCircularProgressBar
+    from "@/components/util/progress/custom-circular-progress-bar/custom-circular-progress-bar";
 
 interface ISpecificSkillProps {
     selectedSkill: TechSkill,

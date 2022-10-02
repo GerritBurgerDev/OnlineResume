@@ -6,11 +6,43 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 1px 10px 5px rgba(black, 0.3);
+  position: relative;
+
+  &-state {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+
+    &-button {
+      padding: 8px 10px;
+      border: 1px solid;
+      border-radius: 5px;
+
+      &.pending {
+        border-color: $orange-color;
+        color: $orange-color;
+      }
+      &.posted {
+        border-color: $green-color-dark;
+        color: $green-color-dark;
+      }
+      &.rejected {
+        border-color: $red-color-dark;
+        color: $red-color-dark;
+      }
+    }
+  }
 
   &-avatar-container {
     display: flex;
     justify-content: center;
     padding: 10px 0;
+  }
+
+  .edit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 
   &-project-details {
