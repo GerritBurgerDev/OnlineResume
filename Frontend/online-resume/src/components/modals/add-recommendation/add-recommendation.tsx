@@ -31,7 +31,13 @@ interface IAddRecommendationProps {
 
 const AddRecommendation = (props: IAddRecommendationProps) => {
     const { profileData } = useProfileStore((state) => state);
-    const { projects, getAllProjects, addRecommendation, getAllRecommendations } = useProjectsStore((state) => state);
+    const {
+        projects,
+        getAllProjects,
+        addRecommendation,
+        removeRecommendation,
+        getAllRecommendations
+    } = useProjectsStore((state) => state);
     const { closeModal } = useModalStore((state) => state);
     const { openNotification } = useNotificationStore((state) => state);
     const [projectItems, setProjectItems] = useState<ISelectItem[]>([]);
@@ -149,12 +155,35 @@ const AddRecommendation = (props: IAddRecommendationProps) => {
             closeModal();
         }).catch((error) => {
             const err = error as AxiosError;
+            const message = (err.response?.data as IClientMessageResponse).message;
 
             openNotification({
                 color: 'error',
                 // eslint-disable-next-line
-                content: `${err.response?.status} ${err.response?.data?.Message}. Please double check all the fields, or contact me.`
+                content: `${err.response?.status} ${message}. Please double check all the fields, or contact me.`
             })
+        });
+    }
+
+    const handleRemoveRecommendation = () => {
+        removeRecommendation(props.id || 0)
+            .then(async (response) => {
+                await getAllRecommendations();
+
+                if (response) {
+                    openNotification({
+                        color: 'success',
+                        content: 'Your recommendation has been removed.',
+                        timeout: 2000
+                    });
+                }
+
+                closeModal();
+            }).catch(() => {
+            openNotification({
+                color: 'error',
+                content: 'Could not remove the recommendation. Please try again.',
+            });
         });
     }
 
@@ -285,7 +314,8 @@ const AddRecommendation = (props: IAddRecommendationProps) => {
                                                     borderColor: red[700],
                                                     color: red[700],
                                                 }
-                                        }}
+                                            }}
+                                            onClick={handleRemoveRecommendation}
                                         >
                                             <Icon>
                                                 delete

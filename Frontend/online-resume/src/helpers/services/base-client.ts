@@ -73,14 +73,8 @@ export class BaseClient implements IBaseClient {
     }
 
     async delete<TResponse>(url: string): Promise<TResponse> {
-        try {
-            const response = await this.client.delete<TResponse>(url, this.getRequestConfig());
-            return response.data;
-        } catch (error) {
-            // TODO: Add Error Handling
-        }
-
-        return {} as TResponse;
+        const response = await this.client.delete<TResponse>(url, this.getRequestConfig());
+        return response.data;
     }
 
     async get<TResponse>(url: string): Promise<TResponse> {

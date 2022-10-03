@@ -27,6 +27,7 @@ func handleRequests() {
 	router.HandleFunc("/project/{id}", GetProject).Methods("GET")
 	router.HandleFunc("/recommendations", GetAllRecommendations).Methods("GET")
 	router.HandleFunc("/recommendations", AddRecommendation).Methods("POST")
+	router.HandleFunc("/recommendation/{id}", RemoveRecommendation).Methods("DELETE")
 	router.HandleFunc("/recommendation/{id}", GetRecommendation).Methods("GET")
 
 	cors := cors.New(cors.Options{
@@ -37,6 +38,8 @@ func handleRequests() {
 		},
 		AllowedMethods: []string{
 			http.MethodPost,
+			http.MethodDelete,
+			http.MethodPut,
 			http.MethodGet,
 		},
 		AllowedHeaders:   []string{"*"},

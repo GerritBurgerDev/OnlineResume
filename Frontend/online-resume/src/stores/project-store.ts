@@ -21,6 +21,7 @@ interface IProjectStore {
     getProjectsForSkill: (skillName: string) => Promise<void>,
     getAllRecommendations: () => Promise<void>,
     addRecommendation: (data: IRecommendation) => Promise<IClientMessageResponse | undefined>,
+    removeRecommendation: (id: number) => Promise<IClientMessageResponse | undefined>,
 
     // Getters
     getPostedRecommendations: () => IRecommendation[],
@@ -100,6 +101,10 @@ export const useProjectsStore = create<IProjectStore>(
 
                 return await projectClientService.addRecommendation(data);
             },
+            removeRecommendation: async (id: number) => {
+                return await projectClientService.removeRecommendation(id);
+            },
+
             // Getters
             getPostedRecommendations: () => {
                 const data = get().recommendations;

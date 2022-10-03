@@ -39,4 +39,8 @@ export class ProjectClientService extends BaseClient implements IProjectClient {
     addRecommendation = async (data: IRecommendation): Promise<IClientMessageResponse | undefined> => {
         return await this.post<IRecommendation | null, IClientMessageResponse>('/recommendations', data);
     }
+
+    removeRecommendation = async (id: number): Promise<IClientMessageResponse | undefined> => {
+        return await this.delete<IClientMessageResponse>(`/recommendation/${id}`);
+    }
 }

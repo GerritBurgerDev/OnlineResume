@@ -16,7 +16,17 @@ import (
 // GetAllRecommendations is a GET method
 // returns an array of Posts.
 func GetAllRecommendations(writer http.ResponseWriter, request *http.Request) {
-	results := Helpers.GetFromCollection(client, "OnlineResume", "Recommendations")
+	opt := bson.M{
+		"filters": []bson.M{
+			{
+				"state": bson.M{
+					"$ne": "removed",
+				},
+			},
+		},
+	}
+
+	results := Helpers.GetFromCollection(client, "OnlineResume", "Recommendations", opt)
 
 	json.NewEncoder(writer).Encode(results)
 }
@@ -102,6 +112,38 @@ func AddRecommendation(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	json.NewEncoder(writer).Encode(result)
+}
+
+func RemoveRecommendation(writer http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	id, _ := strconv.Atoi(vars["id"])
+
+	optRecommendation := bson.M{
+		"filters": []bson.M{
+			{"id": id},
+		},
+	}
+
+	result := Helpers.GetSingleFromCollection(client, "OnlineResume", "Recommendations", optRecommendation)
+
+	if result["StatusCode"] == 404 {
+		writer.WriteHeader(404)
+		json.NewEncoder(writer).Encode(bson.M{"Message": "Recommendation not found!"})
+
+		return
+	} else {
+		update := bson.D{{
+			"$set",
+			bson.M{
+				"state": "removed",
+			},
+		}}
+
+		res := Helpers.UpsertSingleDocument(client, "OnlineResume", "Recommendations", update, optRecommendation)
+
+		json.NewEncoder(writer).Encode(res)
+		return
+	}
 }
 
 // GetProject is a GET method

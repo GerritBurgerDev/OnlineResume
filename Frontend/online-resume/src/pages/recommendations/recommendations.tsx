@@ -32,51 +32,58 @@ const Recommendations = () => {
         updateMyRecommendations(recommendations);
     }, [recommendations]);
 
-    const getProject = (id: number): IProject | undefined => {
+    const getProject = (id: number | number[]): IProject | undefined => {
+        if (Array.isArray(id)) {
+            return;
+        }
+
         return projects.find((project: IProject) => project.id === id);
     }
 
     return (
         <div className="recommendations-page fade-in--1s">
-            <div className="recommendations-page-my-recommendations">
-                <div className="header">
-                    <h1>My Recommendations</h1>
-                    <Button
-                        variant={"contained"}
-                        onClick={() => openModal(MODAL_TYPE_ADD_RECOMMENDATION)}
-                        sx={{
-                            backgroundColor: red[700],
-                            ":hover": {
-                                backgroundColor: red[400]
+            {
+                profileData ?(
+                    <div className="recommendations-page-my-recommendations">
+                        <div className="header">
+                            <h1>My Recommendations</h1>
+                            <Button
+                                variant={"contained"}
+                                onClick={() => openModal(MODAL_TYPE_ADD_RECOMMENDATION)}
+                                sx={{
+                                    backgroundColor: red[700],
+                                    ":hover": {
+                                        backgroundColor: red[400]
+                                    }
+                                }}
+                            >
+                                <Add/> Recommend
+                            </Button>
+                        </div>
+                        <div className="container">
+                            {
+                                myRecommendations.length > 0 ?
+                                    <Masonry columns={{ xs: 1, sm: 3, md: 4 }} spacing={2}>
+                                        {
+                                            myRecommendations.map((recommendation: IRecommendation) => {
+                                                return (
+                                                    <Recommendation
+                                                        key={recommendation.id}
+                                                        {...recommendation}
+                                                        projectName={getProject(recommendation.projectId || 0)?.name}
+                                                        projectPosition={recommendation.positionAtTheTime}
+                                                        displayState
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </Masonry> :
+                                    <h3>No recommendations yet. Maybe add one?</h3>
                             }
-                        }}
-                    >
-                        <Add/> Recommend
-                    </Button>
-                </div>
-                <div className="container">
-                    {
-                        myRecommendations.length > 0 ?
-                            <Masonry columns={{ xs: 1, sm: 3, md: 4 }} spacing={2}>
-                                {
-                                    myRecommendations.map((recommendation: IRecommendation) => {
-                                        return (
-                                            <Recommendation
-                                                key={recommendation.id}
-                                                {...recommendation}
-                                                projectName={getProject(recommendation.projectId || 0)?.name}
-                                                projectPosition={recommendation.positionAtTheTime}
-                                                displayState
-                                            />
-                                        )
-                                    })
-                                }
-                            </Masonry> :
-                            <h3>No recommendations yet. Maybe add one?</h3>
-                    }
-                </div>
-            </div>
-
+                        </div>
+                    </div>
+                ) : null
+            }
 
             <div className="recommendations-page-all-recommendations">
                 <div className="header">
