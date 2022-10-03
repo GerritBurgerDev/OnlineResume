@@ -19,6 +19,7 @@ export interface IProjectClient {
     getAllProjects(): Promise<IProject[] | undefined>
     getProjectsForSkill(skillName: string): Promise<IProject[] | undefined>
     getAllRecommendations(): Promise<IRecommendation[] | undefined>
+    getRecommendationsForProject(projectId: number): Promise<IRecommendation[] | undefined>
     addRecommendation(data: IRecommendation): Promise<IClientMessageResponse | undefined>
     removeRecommendation(id: number): Promise<IClientMessageResponse | undefined>
 }

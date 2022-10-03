@@ -49,6 +49,35 @@ func GetRecommendation(writer http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(writer).Encode(result)
 }
 
+func GetRecommendationForProject(writer http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	projectId, _ := strconv.Atoi(vars["projectId"])
+
+	opt := bson.M{
+		"filters": []bson.M{
+			{
+				"projectId": projectId,
+			},
+			{
+				"state": bson.M{
+					"$eq": "posted",
+				},
+			},
+		},
+	}
+
+	result := Helpers.GetFromCollection(client, "OnlineResume", "Recommendations", opt)
+
+	if result == nil {
+		res := []Structs.Recommendation{}
+		json.NewEncoder(writer).Encode(res)
+
+		return
+	}
+
+	json.NewEncoder(writer).Encode(result)
+}
+
 // AddRecommendation is a POST method
 // TODO: Body
 // returns a status code and message

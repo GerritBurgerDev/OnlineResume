@@ -20,6 +20,7 @@ interface IProjectStore {
     getAllProjects: () => Promise<void>,
     getProjectsForSkill: (skillName: string) => Promise<void>,
     getAllRecommendations: () => Promise<void>,
+    getRecommendationsForProject: (projectId: number) => Promise<IRecommendation[] | undefined>,
     addRecommendation: (data: IRecommendation) => Promise<IClientMessageResponse | undefined>,
     removeRecommendation: (id: number) => Promise<IClientMessageResponse | undefined>,
 
@@ -74,12 +75,13 @@ export const useProjectsStore = create<IProjectStore>(
 
                 const data = await projectClientService.getAllRecommendations();
 
-                if (data) {
-                    set(() => ({
-                        loadingAllRecommendations: false,
-                        recommendations: data
-                    }));
-                }
+                set(() => ({
+                    loadingAllRecommendations: false,
+                    recommendations: data || []
+                }));
+            },
+            getRecommendationsForProject: async (projectId: number) => {
+              return await projectClientService.getRecommendationsForProject(projectId);
             },
             addRecommendation: async (data: IRecommendation) => {
                 if (Array.isArray(data.projectId)) {

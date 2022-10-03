@@ -5,7 +5,7 @@ import {useProjectsStore} from "@/stores/project-store";
 import {IProject} from "@/interfaces/project-interfaces";
 
 const Experience = () => {
-    const { projects, getAllProjects } = useProjectsStore((state) => state);
+    const { projects, getAllProjects } = useProjectsStore();
 
     useEffect(() => {
         const fetchAllProjects = async () => {
@@ -13,15 +13,13 @@ const Experience = () => {
         }
 
         fetchAllProjects().catch(() => { /* DONE */ });
-    }, [getAllProjects]);
+    }, []);
 
     return (
         <div className="experience-page fade-in--1s">
-            <h1>Projects</h1>
-
             <div className="projects-container">
                 {
-                    projects.map((project: IProject) => {
+                    Array.isArray(projects) && projects.map((project: IProject) => {
                         return (
                             <Project key={project.id}  {...project} />
                         )

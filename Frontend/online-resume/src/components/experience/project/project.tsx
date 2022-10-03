@@ -1,4 +1,4 @@
-import React, {useState, SyntheticEvent} from "react";
+import React, {useState, SyntheticEvent, useEffect} from "react";
 import "./project.scss";
 import moment from "moment";
 import IconCard from "@/components/util/icon-card/icon-card";
@@ -9,47 +9,24 @@ import Recommendation from "@/components/experience/recommendation/recommendatio
 import {IProject, IRecommendation} from "@/interfaces/project-interfaces";
 import {yellow} from "@mui/material/colors";
 import {MAP_SKILL_NAME_TO_ICON, MAX_TIMESTAMP} from "@/constants/global-constants";
+import {useProjectsStore} from "@/stores/project-store";
 
 const Project = (props: IProject)  => {
-    const [recommendations, setRecommendations] = useState<IRecommendation[]>([
-        {
-            id: 1,
-            author: "Tristen Paul",
-            relationship: "Co-worker",
-            content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-            rating: 4.0,
-            timestamp: 1663500575,
-            projectId: 1
-        },
-        {
-            id: 2,
-            author: "Tristen Paul",
-            relationship: "Co-worker",
-            content: "Gerrit is a good developer",
-            rating: 3.2,
-            timestamp: 1663500575,
-            projectId: 1
-        },
-        {
-            id: 3,
-            author: "Tristen Paul",
-            relationship: "Co-worker",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            rating: 4.0,
-            timestamp: 1663500575,
-            projectId: 1
-        },
-        {
-            id: 4,
-            author: "Tristen Paul",
-            relationship: "Co-worker",
-            content: "Gerrit is a good developer",
-            rating: 4.4,
-            timestamp: 1663500575,
-            projectId: 1
-        }
-    ]);
+    const { recommendations, getRecommendationsForProject } = useProjectsStore();
 
+    const [displayRecommendations, setRecommendations] = useState<IRecommendation[]>([]);
+
+    useEffect(() => {
+        getRecommendationsForProject(props.id)
+            .then((response: IRecommendation[] | undefined) => {
+                if (!response || response.length === 0) {
+                    setExpanded(false);
+                }
+
+                setRecommendations(response || []);
+            })
+            .catch(() => { /* DONE */ });
+    }, [recommendations]);
 
     const displayDate = () => {
         const startDate = moment.unix(props.startDate).format("MM/YYYY");
@@ -105,7 +82,7 @@ const Project = (props: IProject)  => {
             </div>
 
             <div className="recommendations">
-                <Accordion disabled={recommendations.length === 0} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                <Accordion disabled={displayRecommendations.length === 0} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                     <AccordionSummary
                         className="accordion-header"
                         expandIcon={<ExpandMore />}
@@ -117,7 +94,7 @@ const Project = (props: IProject)  => {
                             Recommendations
                         </div>
                         {
-                            (recommendations.length === 0 || props.name === 'OnlineResume') ?
+                            (displayRecommendations.length === 0 || props.name === 'OnlineResume') ?
                                 <div className="sub-title subtle">No recommendations for this project</div>
                                 : null
                         }
@@ -126,7 +103,7 @@ const Project = (props: IProject)  => {
                         <div className="recommendations-container">
                             <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={2}>
                                 {
-                                    recommendations.map((recommendation: IRecommendation) => {
+                                    displayRecommendations.map((recommendation: IRecommendation) => {
                                         return (
                                             <Recommendation
                                                 key={recommendation.id}
@@ -145,22 +122,5 @@ const Project = (props: IProject)  => {
         </div>
     )
 };
-
-Project.defaultProps = {
-    name: 'BBD Bursar Week',
-    employer: 'BBD Software Development',
-    position: 'Bursar',
-    startDate: 1496278800,
-    endDate: 1496624400,
-    responsibilities: [
-        'Created a website for voting for presenters at a BBD presentation event.',
-        'Out of the 4 bursar groups, our group’s project was chosen as the best.'
-    ],
-    stack: [
-        'Javascript',
-        'MySQL',
-        'PhP'
-    ]
-}
 
 export default Project;
