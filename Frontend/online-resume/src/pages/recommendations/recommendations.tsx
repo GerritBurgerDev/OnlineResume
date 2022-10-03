@@ -10,16 +10,29 @@ import {useProjectsStore} from "@/stores/project-store";
 import {useModalStore} from "@/stores/modal-store";
 import {MODAL_TYPE_ADD_RECOMMENDATION} from "@/constants/modal-constants";
 import {useProfileStore} from "@/stores/profile-store";
+import {RECOMMENDATION_STATE_PENDING} from "@/constants/project-constants";
 
 const Recommendations = () => {
     const { profileData } = useProfileStore((state) => state);
     const { projects, getAllProjects, recommendations, getAllRecommendations, getPostedRecommendations } = useProjectsStore();
     const { openModal } = useModalStore((state) => state);
 
+    const isAdmin = (): boolean => {
+        return profileData?.isAdmin || false;
+    }
+
     const [myRecommendations, setMyRecommendations] = useState<IRecommendation[]>([]);
 
     const updateMyRecommendations = (recommendations: IRecommendation[]) => {
-        setMyRecommendations(recommendations.filter(recommendation => recommendation.authorId === profileData?.email));
+        if (profileData) {
+            if (!isAdmin()) {
+                setMyRecommendations(recommendations.filter(recommendation => recommendation.authorId === profileData?.email));
+            }
+
+            if (isAdmin()) {
+                setMyRecommendations(recommendations.filter(recommendation => recommendation.state === RECOMMENDATION_STATE_PENDING));
+            }
+        }
     }
 
     useEffect(() => {
@@ -43,7 +56,38 @@ const Recommendations = () => {
     return (
         <div className="recommendations-page fade-in--1s">
             {
-                profileData ?(
+                profileData && isAdmin() ?(
+                    <div className="recommendations-page-my-recommendations">
+                        <div className="header">
+                            <h1>Pending Recommendations</h1>
+                        </div>
+                        <div className="container">
+                            {
+                                myRecommendations.length > 0 ?
+                                    <Masonry columns={{ xs: 1, sm: 3, md: 4 }} spacing={2}>
+                                        {
+                                            myRecommendations.map((recommendation: IRecommendation) => {
+                                                return (
+                                                    <Recommendation
+                                                        key={recommendation.id}
+                                                        {...recommendation}
+                                                        projectName={getProject(recommendation.projectId || 0)?.name}
+                                                        projectPosition={recommendation.positionAtTheTime}
+                                                        displayState
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </Masonry> :
+                                    <h3>No recommendations are pending.</h3>
+                            }
+                        </div>
+                    </div>
+                ) : null
+            }
+
+            {
+                profileData && !isAdmin() ?(
                     <div className="recommendations-page-my-recommendations">
                         <div className="header">
                             <h1>My Recommendations</h1>

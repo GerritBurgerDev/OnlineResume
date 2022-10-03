@@ -143,6 +143,29 @@ func AddRecommendation(writer http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(writer).Encode(result)
 }
 
+func UpdateRecommendationState(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "application/json")
+	var recommendation Structs.Recommendation
+	json.NewDecoder(request.Body).Decode(&recommendation)
+
+	optRecommendation := bson.M{
+		"filters": []bson.M{
+			{"id": recommendation.Id},
+		},
+	}
+
+	update := bson.D{{
+		"$set",
+		bson.M{
+			"state": recommendation.State,
+		},
+	}}
+
+	res := Helpers.UpsertSingleDocument(client, "OnlineResume", "Recommendations", update, optRecommendation)
+
+	json.NewEncoder(writer).Encode(res)
+}
+
 func RemoveRecommendation(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	id, _ := strconv.Atoi(vars["id"])
@@ -288,17 +311,16 @@ func CreateUser(writer http.ResponseWriter, request *http.Request) {
 			bson.M{
 				"accessToken": user.AccessToken,
 				"imageUrl":    user.ImageUrl,
-				"isAdmin":     user.IsAdmin,
 			},
 		}}
 
 		res := Helpers.UpsertSingleDocument(client, "OnlineResume", "Users", update, optUser)
+		res["isAdmin"] = result["isAdmin"]
+
 		json.NewEncoder(writer).Encode(res)
 
 		return
 	}
-
-	json.NewEncoder(writer).Encode(result)
 }
 
 // RootCall is a GET method

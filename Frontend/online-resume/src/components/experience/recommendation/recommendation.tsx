@@ -1,14 +1,20 @@
-import React, {ReactNode} from "react";
+import React, {Fragment, ReactNode} from "react";
 import "./recommendation.scss";
 import {Avatar, IconButton, Rating} from "@mui/material";
 import {IRecommendation} from "@/interfaces/project-interfaces";
-import {grey, yellow} from "@mui/material/colors";
+import {green, grey, red, yellow} from "@mui/material/colors";
 import _ from "lodash";
 import {useProfileStore} from "@/stores/profile-store";
-import {Edit} from "@mui/icons-material";
+import {Check, Delete, Edit} from "@mui/icons-material";
 import {useModalStore} from "@/stores/modal-store";
 import {MODAL_TYPE_ADD_RECOMMENDATION} from "@/constants/modal-constants";
-import {RECOMMENDATION_STATE_PENDING} from "@/constants/project-constants";
+import {
+    RECOMMENDATION_STATE_PENDING,
+    RECOMMENDATION_STATE_POSTED,
+    RECOMMENDATION_STATE_REJECTED, RECOMMENDATION_STATE_REMOVED
+} from "@/constants/project-constants";
+import {useProjectsStore} from "@/stores/project-store";
+import {useNotificationStore} from "@/stores/notification-store";
 
 interface IRecommendationProps extends IRecommendation {
     projectName?: string,
@@ -17,8 +23,10 @@ interface IRecommendationProps extends IRecommendation {
 }
 
 const Recommendation = (props: IRecommendationProps) => {
-    const { profileData } = useProfileStore((state) => state);
-    const { openModal } = useModalStore((state) => state);
+    const { updateRecommendationState, getAllRecommendations } = useProjectsStore();
+    const profileData = useProfileStore((state) => state.profileData);
+    const { openModal } = useModalStore();
+    const { openNotification } = useNotificationStore();
 
     const renderRecommendationState = (): ReactNode => {
         if (!props.displayState) return null;
@@ -32,6 +40,25 @@ const Recommendation = (props: IRecommendationProps) => {
 
     const editRecommendation = () => {
         openModal(MODAL_TYPE_ADD_RECOMMENDATION, props);
+    }
+
+    const updateRecommendation = (state: string) => {
+        updateRecommendationState({
+            ...props,
+            state: state
+        }).then(() => {
+            openNotification({
+                color: 'success',
+                content: 'Successfully updated recommendation.'
+            });
+
+            getAllRecommendations().catch(() => { /* DONE */ });
+        }).catch(() => {
+            openNotification({
+                color: 'error',
+                content: 'Could not update recommendation.'
+            });
+        });
     }
 
     return (
@@ -62,6 +89,59 @@ const Recommendation = (props: IRecommendationProps) => {
                       <IconButton sx={{ color: grey[100] }} onClick={editRecommendation}>
                           <Edit/>
                       </IconButton>
+                  </div> :
+                  null
+          }
+
+          {
+              profileData && profileData.isAdmin ?
+                  <div className="edit-button">
+                      {
+                          props.state === RECOMMENDATION_STATE_PENDING ? (
+                              <Fragment>
+                                  <IconButton
+                                      sx={{
+                                          color: green[500],
+                                          border: `1.5px solid ${green[500]}`,
+                                          ':hover': {
+                                              filter: `drop-shadow(0 0 5px ${green[500]})`
+                                          }
+                                      }}
+                                      onClick={() => updateRecommendation(RECOMMENDATION_STATE_POSTED)}
+                                  >
+                                      <Check />
+                                  </IconButton>
+                                  <IconButton
+                                      sx={{
+                                          color: red[700],
+                                          border: `1.5px solid ${red[700]}`,
+                                          ':hover': {
+                                              filter: `drop-shadow(0 0 5px ${red[700]})`
+                                          }
+                                      }}
+                                      onClick={() => updateRecommendation(RECOMMENDATION_STATE_REJECTED)}
+                                  >
+                                      <Edit/>
+                                  </IconButton>
+                              </Fragment>
+                          ) : null
+                      }
+                      {
+                          props.state === RECOMMENDATION_STATE_POSTED ? (
+                              <IconButton
+                                  sx={{
+                                      color: red[700],
+                                      border: `1.5px solid ${red[700]}`,
+                                      ':hover': {
+                                          filter: `drop-shadow(0 0 5px ${red[700]})`
+                                      }
+                                  }}
+                                  onClick={() => updateRecommendation(RECOMMENDATION_STATE_REMOVED)}
+                              >
+                                  <Delete />
+                              </IconButton>
+                          ): null
+                      }
                   </div> :
                   null
           }

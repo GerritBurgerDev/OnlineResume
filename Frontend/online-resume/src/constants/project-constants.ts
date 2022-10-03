@@ -3,6 +3,7 @@ import {IRecommendation} from "@/interfaces/project-interfaces";
 export const RECOMMENDATION_STATE_PENDING = 'pending';
 export const RECOMMENDATION_STATE_POSTED = 'posted';
 export const RECOMMENDATION_STATE_REJECTED = 'rejected';
+export const RECOMMENDATION_STATE_REMOVED = 'removed';
 
 export const TEMP_RECOMMENDATIONS: IRecommendation[] = [
     {

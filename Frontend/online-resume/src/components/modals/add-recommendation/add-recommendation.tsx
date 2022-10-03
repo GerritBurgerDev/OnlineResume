@@ -8,7 +8,7 @@ import {useProjectsStore} from "@/stores/project-store";
 import {IProject, IRecommendation} from "@/interfaces/project-interfaces";
 import _ from "lodash";
 import {useProfileStore} from "@/stores/profile-store";
-import {green, grey, lightGreen, orange, red, yellow} from "@mui/material/colors";
+import {green, grey, red, yellow} from "@mui/material/colors";
 import {HelpOutline} from "@mui/icons-material";
 import moment from "moment";
 import {useModalStore} from "@/stores/modal-store";

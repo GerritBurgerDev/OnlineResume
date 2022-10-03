@@ -62,14 +62,8 @@ export class BaseClient implements IBaseClient {
     }
 
     async put<TRequest, TResponse>(url: string, payload: TRequest): Promise<TResponse> {
-        try {
-            const response = await this.client.put<TResponse>(url, payload, this.getRequestConfig());
-            return response.data;
-        } catch (error) {
-            // TODO: Add Error Handling
-        }
-
-        return {} as TResponse;
+        const response = await this.client.put<TResponse>(url, payload, this.getRequestConfig());
+        return response.data;
     }
 
     async delete<TResponse>(url: string): Promise<TResponse> {
@@ -78,13 +72,7 @@ export class BaseClient implements IBaseClient {
     }
 
     async get<TResponse>(url: string): Promise<TResponse> {
-        try {
-            const response = await this.client.get<TResponse>(url, this.getRequestConfig());
-            return response.data;
-        } catch (error) {
-            // TODO: Add Error Handling
-        }
-
-        return {} as TResponse;
+        const response = await this.client.get<TResponse>(url, this.getRequestConfig());
+        return response.data;
     }
 }

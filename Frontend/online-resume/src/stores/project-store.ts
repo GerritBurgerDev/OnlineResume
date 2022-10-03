@@ -22,6 +22,7 @@ interface IProjectStore {
     getAllRecommendations: () => Promise<void>,
     getRecommendationsForProject: (projectId: number) => Promise<IRecommendation[] | undefined>,
     addRecommendation: (data: IRecommendation) => Promise<IClientMessageResponse | undefined>,
+    updateRecommendationState: (data: IRecommendation) => Promise<IClientMessageResponse | undefined>,
     removeRecommendation: (id: number) => Promise<IClientMessageResponse | undefined>,
 
     // Getters
@@ -102,6 +103,9 @@ export const useProjectsStore = create<IProjectStore>(
                 }
 
                 return await projectClientService.addRecommendation(data);
+            },
+            updateRecommendationState: async (data: IRecommendation) => {
+              return await projectClientService.updateRecommendationState(data);
             },
             removeRecommendation: async (id: number) => {
                 return await projectClientService.removeRecommendation(id);

@@ -73,7 +73,9 @@ const SignInRequired = () => {
                         </div>
                     </Button>
                 )}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onSuccess={onLoginSuccess}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onFailure={onLoginFailure}
                 cookiePolicy={'single_host_origin'}
                 isSignedIn={true}
