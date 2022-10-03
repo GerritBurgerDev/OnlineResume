@@ -3,13 +3,12 @@ package main
 import (
 	"Backend/Helpers"
 	"Backend/Structs"
-	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"gopkg.in/validator.v2"
 	"net/http"
 	"strconv"
 )
@@ -44,18 +43,63 @@ func GetRecommendation(writer http.ResponseWriter, request *http.Request) {
 // TODO: Body
 // returns a status code and message
 func AddRecommendation(writer http.ResponseWriter, request *http.Request) {
-	collection := client.Database("OnlineResume").Collection("Recommendations")
-
 	writer.Header().Set("Content-Type", "application/json")
 	var recommendation Structs.Recommendation
 	json.NewDecoder(request.Body).Decode(&recommendation)
 
-	filters := options.FindOne().SetSort(bson.D{{"Id", -1}})
-	var lastItem Structs.Recommendation
-	collection.FindOne(context.TODO(), bson.D{{}}, filters).Decode(&lastItem)
+	if errs := validator.Validate(recommendation); errs != nil {
+		writer.WriteHeader(400)
+		json.NewEncoder(writer).Encode(bson.M{"Message": "Bad Request", "Errors": errs})
+		return
+	}
 
-	recommendation.Id = lastItem.Id + 1
-	result := Helpers.AddSingleDocument(client, "OnlineResume", "Recommendations", recommendation)
+	optLastItem := bson.M{
+		"sorting": []bson.M{
+			{"id": -1},
+		},
+	}
+
+	optRecommendation := bson.M{
+		"sorting": []bson.M{
+			{"id": -1},
+		},
+		"filters": []bson.M{
+			{"id": recommendation.Id},
+		},
+	}
+
+	lastItemBson := Helpers.GetSingleFromCollection(client, "OnlineResume", "Recommendations", optLastItem)
+	var lastItem Structs.Recommendation
+	bsonBytes, _ := bson.Marshal(lastItemBson)
+	bson.Unmarshal(bsonBytes, &lastItem)
+
+	result := Helpers.GetSingleFromCollection(client, "OnlineResume", "Recommendations", optRecommendation)
+
+	recommendation.State = "pending"
+
+	if result["StatusCode"] == 404 {
+		recommendation.Id = lastItem.Id + 1
+		res := Helpers.AddSingleDocument(client, "OnlineResume", "Recommendations", recommendation)
+		json.NewEncoder(writer).Encode(res)
+
+		return
+	} else {
+		update := bson.D{{
+			"$set",
+			bson.M{
+				"author":            recommendation.Author,
+				"relationship":      recommendation.Relationship,
+				"content":           recommendation.Content,
+				"positionAtTheTime": recommendation.PositionAtTheTime,
+				"rating":            recommendation.Rating,
+			},
+		}}
+
+		res := Helpers.UpsertSingleDocument(client, "OnlineResume", "Recommendations", update, optRecommendation)
+
+		json.NewEncoder(writer).Encode(res)
+		return
+	}
 
 	json.NewEncoder(writer).Encode(result)
 }

@@ -57,14 +57,8 @@ export class BaseClient implements IBaseClient {
     }
 
     async post<TRequest, TResponse>(url: string, payload: TRequest): Promise<TResponse> {
-        try {
-            const response = await this.client.post<TResponse>(url, payload, this.getRequestConfig());
-            return response.data;
-        } catch (error) {
-            // TODO: Add Error Handling
-        }
-
-        return {} as TResponse;
+        const response = await this.client.post<TResponse>(url, payload, this.getRequestConfig());
+        return response.data;
     }
 
     async put<TRequest, TResponse>(url: string, payload: TRequest): Promise<TResponse> {

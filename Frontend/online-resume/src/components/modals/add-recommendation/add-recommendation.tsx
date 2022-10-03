@@ -5,26 +5,36 @@ import CustomSelect from "@/components/util/Inputs/CustomSelect/custom-select";
 import {ISelectItem} from "@/interfaces/global-interfaces";
 import CustomInput from "@/components/util/Inputs/CustomInput/custom-input";
 import {useProjectsStore} from "@/stores/project-store";
-import {IProject} from "@/interfaces/project-interfaces";
+import {IProject, IRecommendation} from "@/interfaces/project-interfaces";
 import _ from "lodash";
 import {useProfileStore} from "@/stores/profile-store";
-import {orange, red, yellow} from "@mui/material/colors";
+import {green, grey, lightGreen, orange, red, yellow} from "@mui/material/colors";
 import {HelpOutline} from "@mui/icons-material";
+import moment from "moment";
+import {useModalStore} from "@/stores/modal-store";
+import {IClientMessageResponse} from "@/interfaces/client.interface";
+import {useNotificationStore} from "@/stores/notification-store";
+import {AxiosError} from "axios";
 
 interface IAddRecommendationProps {
     isEdit?: boolean
-    projectName?: string,
-    projectPosition?: string,
-    content?: string,
+    id?: number,
     author?: string,
+    authorId?: string,
+    projectId?: number,
+    projectName?: string,
+    positionAtTheTime?: string,
+    content?: string,
     relationship?: string,
     rating?: number,
 }
 
 const AddRecommendation = (props: IAddRecommendationProps) => {
     const { profileData } = useProfileStore((state) => state);
-    const { projects, getAllProjects } = useProjectsStore((state) => state);
-    const [projectItems, setProjectitems] = useState<ISelectItem[]>([]);
+    const { projects, getAllProjects, addRecommendation, getAllRecommendations } = useProjectsStore((state) => state);
+    const { closeModal } = useModalStore((state) => state);
+    const { openNotification } = useNotificationStore((state) => state);
+    const [projectItems, setProjectItems] = useState<ISelectItem[]>([]);
 
     const [modalLoading, setModalLoading] = useState(false);
 
@@ -78,7 +88,7 @@ const AddRecommendation = (props: IAddRecommendationProps) => {
                 }
             });
 
-            setProjectitems(_.sortBy(items, 'label'));
+            setProjectItems(_.sortBy(items, 'label'));
             setYourName(profileData?.name || '');
         } else {
             setSelectedProjects([props.projectName || '']);
@@ -86,13 +96,23 @@ const AddRecommendation = (props: IAddRecommendationProps) => {
             setRecommendation(props.content || '');
             setRating(props.rating || 0);
             setRelationship(props.relationship || '');
-            setPosition(props.projectPosition || '');
+            setPosition(props.positionAtTheTime || '');
         }
 
         setModalLoading(false);
     }, []);
 
     const [hasClickedSubmit, setHasClickedSubmit] = useState(false);
+
+    const findProjectIds = (): number[] => {
+        return projects.map((project: IProject) => {
+            if (selectedProjects.includes(project.name)) {
+                return project.id;
+            }
+
+            return 0;
+        }).filter(id => id > 0);
+    }
 
     const handleSubmit = () => {
         setHasClickedSubmit(true);
@@ -101,11 +121,46 @@ const AddRecommendation = (props: IAddRecommendationProps) => {
             || !yourName || !relationship || !recommendation || !rating) {
             return;
         }
+
+        const data: IRecommendation = {
+            author: yourName,
+            authorId: profileData?.email || '',
+            content: recommendation,
+            positionAtTheTime: position,
+            projectId: props.isEdit ? props.projectId : findProjectIds(),
+            rating: rating,
+            relationship: relationship,
+            state: "pending",
+            timestamp: moment().unix(),
+            id: props.id
+        }
+
+        addRecommendation(data).then(async (response: IClientMessageResponse | undefined) => {
+            await getAllRecommendations();
+
+            if (response) {
+                openNotification({
+                    color: 'success',
+                    content: 'Your recommendation has been successfully updated.',
+                    timeout: 2000
+                });
+            }
+
+            closeModal();
+        }).catch((error) => {
+            const err = error as AxiosError;
+
+            openNotification({
+                color: 'error',
+                // eslint-disable-next-line
+                content: `${err.response?.status} ${err.response?.data?.Message}. Please double check all the fields, or contact me.`
+            })
+        });
     }
 
     return (
         <div className="add-recommendation-modal fade-in--1s">
-            <h2>Add recommendation</h2>
+            <h2>{props.isEdit ? 'Edit' : 'Add'} recommendation</h2>
 
             {
                 modalLoading ?
@@ -171,7 +226,7 @@ const AddRecommendation = (props: IAddRecommendationProps) => {
                                 id="my-position"
                                 label="My Position"
                                 variant="outlined"
-                                defaultValue={props.isEdit ? props.projectPosition : ''}
+                                defaultValue={props.isEdit ? props.positionAtTheTime : ''}
                                 onChange={handlePositionChange}
                             />
                             <CustomInput
@@ -219,7 +274,37 @@ const AddRecommendation = (props: IAddRecommendationProps) => {
                             </div>
 
                             <div className="actions">
-                                <Button variant="contained" onClick={handleSubmit}>
+                                {
+                                    props.isEdit && (
+                                        <Button
+                                            variant="outlined"
+                                            sx={{
+                                                color: grey[100],
+                                                borderColor: grey[100],
+                                                ':hover': {
+                                                    borderColor: red[700],
+                                                    color: red[700],
+                                                }
+                                        }}
+                                        >
+                                            <Icon>
+                                                delete
+                                            </Icon>
+                                            Remove
+                                        </Button>
+                                    )
+                                }
+
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: red[700],
+                                        ':hover': {
+                                            backgroundColor: green[600]
+                                        }
+                                    }}
+                                    onClick={handleSubmit}
+                                >
                                     <Icon>
                                         {
                                             props.isEdit ? 'save' : 'add'

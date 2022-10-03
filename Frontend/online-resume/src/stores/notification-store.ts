@@ -4,7 +4,7 @@ import {AlertColor, SnackbarOrigin} from "@mui/material";
 interface INotification {
     isOpen?: boolean,
     color: AlertColor,
-    content: string | JSX.Element,
+    content: string | Element,
     position?: SnackbarOrigin,
     timeout?: number,
 }

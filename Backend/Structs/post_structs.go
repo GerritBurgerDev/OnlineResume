@@ -3,13 +3,15 @@ package Structs
 // Recommendation - The struct for the Recommendation type.
 type Recommendation struct {
 	Id                int64   `bson:"id"`
-	Author            string  `bson:"author"`
-	Relationship      string  `bson:"relationship"`
-	PositionAtTheTime string  `bson:"positionAtTheTime"`
-	Content           string  `bson:"content"`
-	Rating            float64 `bson:"rating"`
-	Timestamp         int64   `bson:"timestamp"`
-	ProjectId         int64   `bson:"projectId"`
+	Author            string  `bson:"author" validate:"nonzero"`
+	AuthorId          string  `bson:"authorId" validate:"nonzero"`
+	Relationship      string  `bson:"relationship" validate:"nonzero"`
+	PositionAtTheTime string  `bson:"positionAtTheTime" validate:"nonzero"`
+	Content           string  `bson:"content" validate:"nonzero"`
+	Rating            float64 `bson:"rating" validate:"nonzero"`
+	Timestamp         int64   `bson:"timestamp" validate:"nonzero"`
+	ProjectId         int64   `bson:"projectId" validate:"nonzero"`
+	State             string  `bson:"state"`
 }
 
 type User struct {

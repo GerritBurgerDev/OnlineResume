@@ -13,18 +13,24 @@ import {useProfileStore} from "@/stores/profile-store";
 
 const Recommendations = () => {
     const { profileData } = useProfileStore((state) => state);
-    const { projects, getAllProjects, recommendations, getAllRecommendations, getPostedRecommendations } = useProjectsStore((state) => state);
+    const { projects, getAllProjects, recommendations, getAllRecommendations, getPostedRecommendations } = useProjectsStore();
     const { openModal } = useModalStore((state) => state);
+
+    const [myRecommendations, setMyRecommendations] = useState<IRecommendation[]>([]);
+
+    const updateMyRecommendations = (recommendations: IRecommendation[]) => {
+        setMyRecommendations(recommendations.filter(recommendation => recommendation.authorId === profileData?.email));
+    }
 
     useEffect(() => {
         getAllProjects().catch(() => { /* Called */ });
-        getAllRecommendations().then(() => {
-            setMyRecommendations(recommendations.filter(recommendation => recommendation.authorId === profileData?.email));
-        }).catch(() => { /* Called */ });
+        getAllRecommendations().catch(() => { /* Called */ });
 
     }, [profileData]);
 
-    const [myRecommendations, setMyRecommendations] = useState<IRecommendation[]>([]);
+    useEffect(() => {
+        updateMyRecommendations(recommendations);
+    }, [recommendations]);
 
     const getProject = (id: number): IProject | undefined => {
         return projects.find((project: IProject) => project.id === id);
@@ -58,8 +64,8 @@ const Recommendations = () => {
                                             <Recommendation
                                                 key={recommendation.id}
                                                 {...recommendation}
-                                                projectName={getProject(recommendation.projectId)?.name}
-                                                projectPosition={getProject(recommendation.projectId)?.position}
+                                                projectName={getProject(recommendation.projectId || 0)?.name}
+                                                projectPosition={recommendation.positionAtTheTime}
                                                 displayState
                                             />
                                         )
@@ -84,8 +90,8 @@ const Recommendations = () => {
                                     <Recommendation
                                         key={recommendation.id}
                                         {...recommendation}
-                                        projectName={getProject(recommendation.projectId)?.name}
-                                        projectPosition={getProject(recommendation.projectId)?.position}
+                                        projectName={getProject(recommendation.projectId || 0)?.name}
+                                        projectPosition={recommendation.positionAtTheTime}
                                     />
                                 )
                             })

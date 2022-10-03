@@ -42,10 +42,10 @@
     justify-content: flex-end;
     margin-right: 8px;
     margin-top: 10px;
+    column-gap: 10px;
 
     button {
       column-gap: 5px;
-      background-color: $red-color-dark;
     }
   }
 }

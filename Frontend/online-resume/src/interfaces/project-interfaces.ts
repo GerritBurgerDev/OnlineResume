@@ -19,7 +19,7 @@ export interface IRecommendation {
     content: string,
     rating: number,
     timestamp: number,
-    projectId: number,
+    projectId: number | number[] | undefined,
     positionAtTheTime: string,
     state: string
 }

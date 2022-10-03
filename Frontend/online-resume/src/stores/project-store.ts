@@ -2,7 +2,8 @@ import create, {StateCreator} from "zustand";
 import {IProject, IRecommendation} from "@/interfaces/project-interfaces";
 import {projectClientService} from "@/helpers/services/services";
 import {persist, PersistOptions} from "zustand/middleware";
-import {RECOMMENDATION_STATE_POSTED, TEMP_RECOMMENDATIONS} from "@/constants/project-constants";
+import {RECOMMENDATION_STATE_POSTED} from "@/constants/project-constants";
+import {IClientMessageResponse} from "@/interfaces/client.interface";
 
 interface IProjectStore {
     // Data
@@ -19,6 +20,7 @@ interface IProjectStore {
     getAllProjects: () => Promise<void>,
     getProjectsForSkill: (skillName: string) => Promise<void>,
     getAllRecommendations: () => Promise<void>,
+    addRecommendation: (data: IRecommendation) => Promise<IClientMessageResponse | undefined>,
 
     // Getters
     getPostedRecommendations: () => IRecommendation[],
@@ -32,12 +34,14 @@ type MyPersist = (
 export const useProjectsStore = create<IProjectStore>(
     (persist as unknown as MyPersist)(
         (set, get) => ({
+            // Data
             projects: [],
             loadingAllProjects: false,
             projectsForSkill: [],
             loadingProjectForSkill: false,
-            recommendations: TEMP_RECOMMENDATIONS,
+            recommendations: [],
             loadingAllRecommendations: false,
+            // Actions
             getAllProjects: async () => {
                 set(() => ({
                     loadingAllProjects: true
@@ -67,16 +71,44 @@ export const useProjectsStore = create<IProjectStore>(
                     loadingAllRecommendations: true
                 }));
 
-                const data = TEMP_RECOMMENDATIONS;
-                // const data = await projectClientService.getAllRecommendations();
+                const data = await projectClientService.getAllRecommendations();
 
-                set(() => ({
-                    loadingAllRecommendations: false,
-                    recommendations: data
-                }));
+                if (data) {
+                    set(() => ({
+                        loadingAllRecommendations: false,
+                        recommendations: data
+                    }));
+                }
             },
+            addRecommendation: async (data: IRecommendation) => {
+                if (Array.isArray(data.projectId)) {
+                    let response;
+                    for (let i = 0; i < data.projectId.length; i++) {
+                        // eslint-disable-next-line no-useless-catch
+                        try {
+                            response = await projectClientService.addRecommendation({
+                                ...data,
+                                projectId: data.projectId[i]
+                            });
+                        } catch (err) {
+                            throw err;
+                        }
+                    }
+
+                    return response;
+                }
+
+                return await projectClientService.addRecommendation(data);
+            },
+            // Getters
             getPostedRecommendations: () => {
-                return get().recommendations.filter(recommendation => recommendation.state === RECOMMENDATION_STATE_POSTED)
+                const data = get().recommendations;
+
+                if (!data || Object.keys(data).length === 0) {
+                    return [];
+                }
+
+                return data.filter(recommendation => recommendation.state === RECOMMENDATION_STATE_POSTED);
             },
         }),
         {

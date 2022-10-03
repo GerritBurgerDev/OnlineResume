@@ -1,6 +1,8 @@
 import {BaseClient} from "@/helpers/services/base-client";
-import {ApiConfig, IProjectClient} from "@/interfaces/client.interface";
+import {ApiConfig, IClientMessageResponse, IProjectClient} from "@/interfaces/client.interface";
 import {IProject, IRecommendation} from "@/interfaces/project-interfaces";
+import {IProfile} from "@/interfaces/global-interfaces";
+import {AxiosError} from "axios";
 
 export class ProjectClientService extends BaseClient implements IProjectClient {
     constructor(apiConfig: ApiConfig | undefined = undefined) {
@@ -32,5 +34,9 @@ export class ProjectClientService extends BaseClient implements IProjectClient {
             // TODO: Error Handling
             console.error(error);
         }
+    }
+
+    addRecommendation = async (data: IRecommendation): Promise<IClientMessageResponse | undefined> => {
+        return await this.post<IRecommendation | null, IClientMessageResponse>('/recommendations', data);
     }
 }
