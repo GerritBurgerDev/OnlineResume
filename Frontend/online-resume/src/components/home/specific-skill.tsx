@@ -5,6 +5,7 @@ import CircularProgressBar from "@/components/util/progress/circular-progress-ba
 import React from "react";
 import {TechSkill} from "@/interfaces/global-interfaces";
 import {IProject} from "@/interfaces/project-interfaces";
+import {useProfileStore} from "@/stores/profile-store";
 
 interface ISpecificSkillProps {
     selectedSkill: TechSkill,
@@ -14,6 +15,8 @@ interface ISpecificSkillProps {
 }
 
 const SpecificSkill = (props: ISpecificSkillProps) => {
+    const profileData = useProfileStore((state) => state.profileData);
+
     const calculateProficiency = (value: number): string => {
         if (value <= 40) {
             return 'Familiar';
@@ -60,7 +63,7 @@ const SpecificSkill = (props: ISpecificSkillProps) => {
                     <div className="top-section">
                         <h1>About</h1>
                         <div
-                            contentEditable={true}
+                            contentEditable={profileData?.isAdmin}
                             suppressContentEditableWarning={true}
                             onBlur={(e) => {console.log(e.currentTarget.textContent)}}
                         >
