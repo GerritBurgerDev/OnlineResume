@@ -29,6 +29,7 @@
           &:hover {
             cursor: pointer;
             color: $blue-color-light;
+            text-shadow: 0 0 12px $blue-color;
           }
         }
       }

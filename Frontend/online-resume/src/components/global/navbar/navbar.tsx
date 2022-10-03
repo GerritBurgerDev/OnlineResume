@@ -16,11 +16,22 @@ import {IProfile} from "@/interfaces/global-interfaces";
 import {grey, red, orange, blue, green} from "@mui/material/colors";
 import {useNotificationStore} from "@/stores/notification-store";
 import {MODAL_TYPE_EMAIL} from "@/constants/modal-constants";
+import {useEffect, useState} from "react";
 
 const Navbar = () => {
     const { openModal } = useModalStore((state) => state);
     const { openNotification } = useNotificationStore((state) => state);
     const { profileData, setProfileData } = useProfileStore((state) => state);
+
+    const [distanceFromTop, setDistanceFromTop] = useState<number | undefined>(0);
+
+    const onScroll = () => {
+        setDistanceFromTop(window.top?.scrollY);
+    }
+
+    useEffect(() => {
+        window.addEventListener("scroll", onScroll);
+    }, [])
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -62,7 +73,14 @@ const Navbar = () => {
     }
 
     return (
-        <AppBar position="sticky" className="navbar">
+        <AppBar
+            position="sticky"
+            className="navbar"
+            sx={{
+                backgroundColor: distanceFromTop && distanceFromTop > 0 ? grey[900] : 'transparent',
+                boxShadow: distanceFromTop && distanceFromTop > 0 ? '' : 'none'
+            }}
+        >
             <Toolbar>
                 <div className="left-elements">
                     <h3>

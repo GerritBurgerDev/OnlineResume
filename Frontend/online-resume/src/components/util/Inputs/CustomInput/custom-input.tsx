@@ -9,20 +9,24 @@ const customTextSxProps: SxProps = {
         color: alpha(grey[100], 0.5),
         "&.Mui-focused, &.MuiFormLabel-filled": {
             top: '0',
+            color: grey[50],
         }
     },
     "& textarea": {
         margin: '-12px -14px'
     },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        border: `2px solid ${grey[50]}`
+    },
     "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-        borderColor: blue[700]
+        border: `2px solid ${grey[50]}`
     },
     "& .MuiInputBase-input": {
         color: grey[100],
         padding: '12px 14px',
     },
     "& .MuiOutlinedInput-notchedOutline": {
-        borderColor: grey[100]
+        borderColor: grey[100],
     }
 }
 

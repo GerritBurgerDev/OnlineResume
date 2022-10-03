@@ -8,6 +8,19 @@ const Experience = () => {
     const { projects, getAllProjects } = useProjectsStore();
 
     useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                } else {
+                    entry.target.classList.remove('show');
+                }
+            })
+        });
+
+        const projectElements = document.querySelectorAll('.hidden');
+        projectElements.forEach((el: Element) => observer.observe(el));
+
         const fetchAllProjects = async () => {
             await getAllProjects();
         }
@@ -21,7 +34,9 @@ const Experience = () => {
                 {
                     Array.isArray(projects) && projects.map((project: IProject) => {
                         return (
-                            <Project key={project.id}  {...project} />
+                            <div key={project.id} className="hidden">
+                                <Project {...project} />
+                            </div>
                         )
                     })
                 }

@@ -260,10 +260,10 @@ const AddRecommendation = (props: IAddRecommendationProps) => {
                             />
                             <CustomInput
                                 error={hasClickedSubmit && !relationship}
-                                helperText={(hasClickedSubmit && !relationship) && 'Please specify your position at the time.'}
+                                helperText={(hasClickedSubmit && !relationship) && 'Please specify our relationship at the time.'}
                                 style={{ width: '300px' }}
-                                id="your-position"
-                                label="Your Position"
+                                id="relationship"
+                                label="Relationship"
                                 variant="outlined"
                                 defaultValue={props.isEdit ? props.relationship : ''}
                                 onChange={handleRelationshipChange}

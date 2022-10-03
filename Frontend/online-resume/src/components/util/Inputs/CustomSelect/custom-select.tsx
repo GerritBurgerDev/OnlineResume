@@ -31,7 +31,7 @@ const CustomInput = styled(InputBase)(({ theme }) => ({
         border: `2px solid ${red[700]}`,
     },
     '&.Mui-focused': {
-        border: `2px solid ${blue[600]}`,
+        border: `2px solid ${grey[50]}`,
         borderRadius: 4,
     },
     '& .MuiSvgIcon-root': {
@@ -88,6 +88,7 @@ const CustomSelect = (props: ICustomSelectProps) => {
                         left: '-5px',
                         top: '0',
                         backgroundColor: grey[800],
+                        color: grey[50],
                         padding: '0 10px'
                     }
                 }}

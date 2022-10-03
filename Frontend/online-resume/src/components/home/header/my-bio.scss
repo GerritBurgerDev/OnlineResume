@@ -2,9 +2,10 @@
 
 .my-bio {
   flex-basis: 55%;
-  background: $dark-color;
+  background: $dark-color-darker;
   box-shadow: 0 1px 10px 5px rgba(black, 0.3);
   padding: 20px;
+  border-radius: 5px;
 
   .top-section {
     display: flex;

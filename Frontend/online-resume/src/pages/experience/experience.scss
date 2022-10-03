@@ -14,8 +14,17 @@
     flex-direction: column;
     row-gap: 30px;
 
-    .project {
-      border-radius: 5px;
+    .hidden {
+      opacity: 0;
+      filter: blur(5px);
+      transform: translateX(-100%);
+      transition: all 1s;
+    }
+
+    .show {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateX(0);
     }
   }
 }

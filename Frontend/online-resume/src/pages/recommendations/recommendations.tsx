@@ -96,9 +96,6 @@ const Recommendations = () => {
                                 onClick={() => openModal(MODAL_TYPE_ADD_RECOMMENDATION)}
                                 sx={{
                                     backgroundColor: red[700],
-                                    ":hover": {
-                                        backgroundColor: red[400]
-                                    }
                                 }}
                             >
                                 <Add/> Recommend
