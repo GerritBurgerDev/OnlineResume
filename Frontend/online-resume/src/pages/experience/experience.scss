@@ -3,6 +3,7 @@
 .experience-page {
   max-width: 1200px;
   width: 100vw;
+  margin: auto;
 
   @media (max-width: 1200px) {
     width: 100%;
@@ -12,5 +13,9 @@
     display: flex;
     flex-direction: column;
     row-gap: 30px;
+
+    .project {
+      border-radius: 5px;
+    }
   }
 }
