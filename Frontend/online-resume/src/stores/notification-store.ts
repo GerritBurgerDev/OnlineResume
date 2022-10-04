@@ -1,10 +1,11 @@
 import create from "zustand";
 import {AlertColor, SnackbarOrigin} from "@mui/material";
+import {ReactNode} from "react";
 
 interface INotification {
     isOpen?: boolean,
     color: AlertColor,
-    content: string | Element,
+    content: string | ReactNode,
     position?: SnackbarOrigin,
     timeout?: number,
 }
