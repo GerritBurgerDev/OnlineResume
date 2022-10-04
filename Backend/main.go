@@ -36,7 +36,7 @@ func handleRequests() {
 		AllowedOrigins: []string{
 			"http://127.0.0.1:5173",
 			"http://localhost:5173",
-			"https://env-prod.d1avb0a17o43q.amplifyapp.com/",
+			"https://env-prod.d1avb0a17o43q.amplifyapp.com",
 		},
 		AllowedMethods: []string{
 			http.MethodPost,
