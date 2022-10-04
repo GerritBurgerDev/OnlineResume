@@ -8,6 +8,7 @@ interface IconCardProps {
     isCustom?: boolean,
     size: number,
     color?: string,
+    canHover?: boolean,
     onCardClick?: (name: string) => void,
 }
 
@@ -22,7 +23,7 @@ const IconCard = (props: IconCardProps) => {
     const getIcon = (): JSX.Element => {
         if (props.isCustom) {
             return (
-                <img src={`/svgs/${props.icon}.svg`} alt={`${props.icon}-icon`}/>
+                <img src={`/svgs/icons/${props.icon}.svg`} alt={`${props.icon}-icon`}/>
             )
         }
 
@@ -38,7 +39,11 @@ const IconCard = (props: IconCardProps) => {
     }
 
     return (
-        <div className="icon-card" style={getElementStyle()} onClick={() => onCardClick()}>
+        <div
+            className={`icon-card ${props.canHover ? 'can-hover' : ''}`}
+            style={getElementStyle()}
+            onClick={() => onCardClick()}
+        >
             {getIcon()}
         </div>
     )

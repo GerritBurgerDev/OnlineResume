@@ -3,8 +3,12 @@ import {Button, Icon} from "@mui/material";
 import {GitHub, LinkedIn} from "@mui/icons-material";
 import React from "react";
 import "./my-bio.scss";
+import {MODAL_TYPE_ADD_RECOMMENDATION} from "@/constants/modal-constants";
+import {useModalStore} from "@/stores/modal-store";
 
 const MyBio = () => {
+    const { openModal } = useModalStore((state) => state);
+
     return (
         <div className="my-bio">
             <div className="top-section">
@@ -31,7 +35,10 @@ const MyBio = () => {
             </div>
 
             <div className="actions-container">
-                <Button variant="contained">
+                <Button
+                    variant="contained"
+                    onClick={() => openModal(MODAL_TYPE_ADD_RECOMMENDATION)}
+                >
                     <Icon>recommend</Icon>
                     Recommend
                 </Button>

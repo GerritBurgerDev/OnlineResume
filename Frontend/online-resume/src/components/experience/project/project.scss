@@ -1,0 +1,101 @@
+@import "@/assets/css/colors.scss";
+
+.project {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  background: $dark-color-darker;
+  box-shadow: 0 1px 10px 5px rgba(black, 0.4);
+  padding: 20px;
+  border-radius: 5px;
+
+  .header {
+    display: flex;
+    align-items: center;
+
+    > * {
+      flex: 1;
+      display: flex;
+    }
+
+    h3, h4 {
+      margin: 0;
+    }
+
+    :nth-child(2) {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      font-weight: 200;
+      color: $yellow-color;
+    }
+
+    :nth-child(3) {
+      justify-content: flex-end;
+      font-weight: 200;
+    }
+  }
+
+  .position {
+    margin-top: -15px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  .responsibilities {
+    h2 {
+      margin-top: 0;
+    }
+
+    ul {
+      padding-inline-start: 10px;
+      list-style: none;
+
+      li {
+        display: flex;
+        align-items: center;
+        column-gap: 10px
+      }
+    }
+  }
+
+  .stack {
+    display: flex;
+    column-gap: 15px;
+  }
+
+  .recommendations {
+    .MuiPaper-root {
+      background-color: $dark-color-darker;
+      color: white;
+    }
+
+    .MuiAccordionSummary-expandIconWrapper {
+      color: white;
+    }
+
+    .accordion {
+      &-header {
+        .title {
+          flex-basis: 40%;
+        }
+      }
+    }
+
+    .recommendations-container {
+      .recommendation {
+        transition: .2s ease-in-out;
+
+        &:hover {
+          transform: scale(1.02);
+        }
+      }
+    }
+  }
+}

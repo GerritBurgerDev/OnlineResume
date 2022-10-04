@@ -18,9 +18,11 @@
   }
 
   .tech-skills-section {
+    margin-top: 20px;
     padding: 20px;
-    background: $dark-color;
+    background: $dark-color-darker;
     box-shadow: 0 1px 10px 5px rgba(black, 0.3);
+    border-radius: 5px;
 
     .title {
       display: flex;
@@ -42,6 +44,7 @@
         &:hover {
           cursor: pointer;
           color: $blue-color-light;
+          text-shadow: 0 0 12px $blue-color;
         }
       }
     }
@@ -106,7 +109,12 @@
             transition: .2s ease-in-out;
 
             &:hover {
-              transform: scale(1.2);
+              .icon-card {
+                box-shadow: 0 0 5px 5px rgb(black, 0.3);
+              }
+
+              transform: scale(1.1);
+              text-shadow: 0 0 12px $blue-color;
             }
           }
 
@@ -127,70 +135,32 @@
 
               span {
                 color: $blue-color-light;
+                text-shadow: 0 0 12px $blue-color;
               }
             }
           }
         }
       }
+    }
+  }
 
-      .specific-skill {
-        margin-top: 20px;
-        display: flex;
-        column-gap: 20px;
+  .recommendations-section {
+    margin-top: 20px;
 
-        .left-section {
-          h1 {
-            margin-bottom: 15px;
-            font-weight: 500;
-          }
+    .recommendations-page-all-recommendations {
+      background-color: transparent;
+      box-shadow: none;
+      padding: 20px 0;
 
-          .top-section {
-            h1 {
-              margin-top: 5px;
-            }
-          }
+      .header {
+        display: none;
+      }
 
-          .bottom-section {
-            .projects {
-              display: flex;
-              flex-direction: column;
-              row-gap: 5px;
+      .container {
+        margin-top: 0;
 
-              a {
-                color: $blue-color;
-
-                &:hover {
-                  cursor: pointer;
-                  color: $blue-color-light;
-                }
-              }
-            }
-          }
-        }
-
-        .right-section {
-          display: flex;
-          flex: 1;
-
-          .left-section {
-            flex-basis: 65%;
-          }
-
-          .right-section {
-            flex-basis: 35%;
-            display: flex;
-            justify-content: center;
-
-            .top-section {
-              .experience {
-                padding-bottom: 40px;
-              }
-
-              .confidence {
-                padding-bottom: 40px;
-              }
-            }
-          }
+        .recommendation {
+          background-color: $dark-color-darker;
         }
       }
     }

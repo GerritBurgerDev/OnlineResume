@@ -1,0 +1,63 @@
+@import "@/assets/css/colors.scss";
+
+.specific-skill {
+  margin-top: 20px;
+  display: flex;
+  column-gap: 20px;
+
+  .left-section {
+    h1 {
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    .top-section {
+      h1 {
+        margin-top: 5px;
+      }
+    }
+
+    .bottom-section {
+      .projects {
+        display: flex;
+        flex-direction: column;
+        row-gap: 5px;
+
+        a {
+          color: $blue-color;
+
+          &:hover {
+            cursor: pointer;
+            color: $blue-color-light;
+            text-shadow: 0 0 12px $blue-color;
+          }
+        }
+      }
+    }
+  }
+
+  .right-section {
+    display: flex;
+    flex: 1;
+
+    .left-section {
+      flex-basis: 65%;
+    }
+
+    .right-section {
+      flex-basis: 35%;
+      display: flex;
+      justify-content: center;
+
+      .top-section {
+        .experience {
+          padding-bottom: 40px;
+        }
+
+        .confidence {
+          padding-bottom: 40px;
+        }
+      }
+    }
+  }
+}

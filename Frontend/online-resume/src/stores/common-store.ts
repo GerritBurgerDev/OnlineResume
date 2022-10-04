@@ -30,5 +30,5 @@ export const useCommonStore = create<ICommonStore>((set) => ({
             techSkills: Object.values(data?.techSkills as { [key: string]: TechSkill }),
             currentEmployment: data?.currentEmployment,
         }));
-    },
+    }
 }))

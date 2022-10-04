@@ -63,7 +63,7 @@ const CircularProgressBar = (props: CircularProgressBarProps) => {
                         {
                             typeof props.icon === 'string' ?
                                 props.isCustomIcon ?
-                                    <img src={`/svgs/${props.icon}.svg`} alt={`${props.icon}-icon`} style={{ width: iconSize, height: iconSize }}/>
+                                    <img src={`/svgs/icons/${props.icon}.svg`} alt={`${props.icon}-icon`} style={{ width: iconSize, height: iconSize }}/>
                                     : <Icon style={{ fontSize: iconSize, color: grey[400] }}>{props.icon}</Icon>
                                 : props.icon
                         }

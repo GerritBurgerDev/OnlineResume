@@ -1,0 +1,21 @@
+@import "@/assets/css/colors.scss";
+
+.sign-in-required-modal {
+  h1 {
+    margin-top: 5px;
+  }
+
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+  p {
+    margin-top: 0;
+  }
+
+  button {
+    align-self: center;
+    width: 180px !important;
+  }
+}

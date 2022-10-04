@@ -1,0 +1,23 @@
+@import "@/assets/css/colors.scss";
+
+.email-me {
+  h1 {
+    margin-top: 5px;
+  }
+
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      column-gap: 10px;
+      background-color: $red-color-dark;
+    }
+  }
+}

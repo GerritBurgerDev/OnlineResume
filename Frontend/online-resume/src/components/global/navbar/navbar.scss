@@ -1,9 +1,8 @@
-@import "@/assets/css/colors";
+@import "@/assets/css/colors.scss";
 
 .navbar {
-  height: 60px;
+  height: 70px;
   width: 100%;
-  background: $red-color-dark !important;
 
   .left-elements {
     height: 100%;
@@ -53,6 +52,24 @@
   }
 
   .right-elements {
+    display: flex;
+
+    .MuiSvgIcon-root:hover {
+      filter: drop-shadow(0 0 5px white);
+    }
+
+    .login-container {
+      margin-right: 30px;
+
+      button:hover {
+        .MuiSvgIcon-root {
+          filter: drop-shadow(0 0 5px white);
+        }
+
+        text-shadow: 0 0 5px white;
+      }
+    }
+
     @media (max-width: 800px) {
       flex: 1;
       display: flex;

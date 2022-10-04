@@ -20,10 +20,17 @@ var ctx context.Context
 func handleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", RootCall).Methods("GET")
+	router.HandleFunc("/signin", CreateUser).Methods("POST")
 	router.HandleFunc("/common-data", GetCommonData).Methods("GET")
+	router.HandleFunc("/projects", GetAllProjects).Methods("GET")
+	router.HandleFunc("/projects/{skill}", GetProjectsForSkill).Methods("GET")
+	router.HandleFunc("/project/{id}", GetProject).Methods("GET")
 	router.HandleFunc("/recommendations", GetAllRecommendations).Methods("GET")
 	router.HandleFunc("/recommendations", AddRecommendation).Methods("POST")
+	router.HandleFunc("/recommendations", UpdateRecommendationState).Methods("PUT")
+	router.HandleFunc("/recommendation/{id}", RemoveRecommendation).Methods("DELETE")
 	router.HandleFunc("/recommendation/{id}", GetRecommendation).Methods("GET")
+	router.HandleFunc("/project/{projectId}/recommendations", GetRecommendationForProject).Methods("GET")
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{
@@ -33,6 +40,8 @@ func handleRequests() {
 		},
 		AllowedMethods: []string{
 			http.MethodPost,
+			http.MethodDelete,
+			http.MethodPut,
 			http.MethodGet,
 		},
 		AllowedHeaders:   []string{"*"},
