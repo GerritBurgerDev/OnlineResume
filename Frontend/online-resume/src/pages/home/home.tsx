@@ -13,7 +13,6 @@ import MyBio from "@/components/home/header/my-bio";
 import CurrentEmployment from "@/components/home/header/current-employment";
 import {useProjectsStore} from "@/stores/project-store";
 import SpecificSkill from "@/components/home/specific-skill";
-import Experience from "@/pages/experience/experience";
 import Recommendations from "@/pages/recommendations/recommendations";
 
 const Home = () => {
@@ -180,11 +179,6 @@ const Home = () => {
                     }
                 </div>
             </div>
-
-            {/*<div className="experience-section">*/}
-            {/*    <h1>Experience</h1>*/}
-            {/*    <Experience />*/}
-            {/*</div>*/}
 
             <div className="recommendations-section">
                 <h1>Recommendations</h1>

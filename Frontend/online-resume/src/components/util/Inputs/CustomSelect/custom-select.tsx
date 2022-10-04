@@ -9,7 +9,7 @@ import {
     SelectChangeEvent,
     SelectProps
 } from "@mui/material";
-import {blue, grey, red} from "@mui/material/colors";
+import {grey, red} from "@mui/material/colors";
 import React, {CSSProperties, ReactNode} from "react";
 import {makeStyles} from "@mui/styles";
 import {styled} from "@mui/material/styles";

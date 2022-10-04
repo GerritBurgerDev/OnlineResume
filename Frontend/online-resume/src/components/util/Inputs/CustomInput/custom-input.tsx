@@ -1,6 +1,6 @@
 import {alpha, BaseTextFieldProps, SxProps, TextField} from "@mui/material";
 import React, {ChangeEvent} from "react";
-import {blue, grey} from "@mui/material/colors";
+import {grey} from "@mui/material/colors";
 
 const customTextSxProps: SxProps = {
     margin: '8px',

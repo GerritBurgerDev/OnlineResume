@@ -1,21 +1,9 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {Snackbar, Alert} from "@mui/material";
 import Slide, { SlideProps } from '@mui/material/Slide';
 import {useNotificationStore} from "@/stores/notification-store";
 
 type TransitionProps = Omit<SlideProps, 'direction'>;
-//
-// function TransitionLeft(props: TransitionProps) {
-//     return <Slide {...props} direction="left" />;
-// }
-//
-// function TransitionUp(props: TransitionProps) {
-//     return <Slide {...props} direction="up" />;
-// }
-//
-// function TransitionRight(props: TransitionProps) {
-//     return <Slide {...props} direction="right" />;
-// }
 
 function TransitionDown(props: TransitionProps) {
     return <Slide {...props} direction="down"/>;
@@ -43,7 +31,9 @@ const NotificationWrapper = () => {
                 key={TransitionDown.name}
             >
                 <Alert onClose={handleClose} severity={notification?.color} sx={{ width: '100%' }}>
-                    {notification?.content}
+                    {
+                        notification?.content
+                    }
                 </Alert>
             </Snackbar>
         </div>
