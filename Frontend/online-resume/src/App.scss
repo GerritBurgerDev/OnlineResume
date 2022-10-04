@@ -1,6 +1,8 @@
 @import "@/assets/css/colors.scss";
 
 .app-container {
+  min-height: 100vh;
+  position: relative;
   display: flex;
   flex-direction: column;
 
@@ -14,6 +16,38 @@
       margin: 20px;
       width: auto;
     }
+  }
+
+  .wave {
+    position: absolute;
+    top: 0;
+    z-index: -1;
+
+    aspect-ratio: 900/300;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .header-layer {
+    background-image: url("@/assets/svgs/backrgounds/wave-header.svg");
+  }
+
+  .bottom-peaks {
+    position: absolute;
+    bottom: 0;
+    z-index: -1;
+
+    aspect-ratio: 900/300;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .peaks-layer {
+    background-image: url("@/assets/svgs/backrgounds/peaks-bottom.svg");
   }
 }
 

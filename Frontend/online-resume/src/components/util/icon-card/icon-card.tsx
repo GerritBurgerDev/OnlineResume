@@ -23,7 +23,7 @@ const IconCard = (props: IconCardProps) => {
     const getIcon = (): JSX.Element => {
         if (props.isCustom) {
             return (
-                <img src={`/svgs/${props.icon}.svg`} alt={`${props.icon}-icon`}/>
+                <img src={`/svgs/icons/${props.icon}.svg`} alt={`${props.icon}-icon`}/>
             )
         }
 

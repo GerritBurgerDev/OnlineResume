@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import "./recommendations.scss";
 import {Button} from "@mui/material";
 import {red} from "@mui/material/colors";
@@ -12,7 +12,11 @@ import {MODAL_TYPE_ADD_RECOMMENDATION} from "@/constants/modal-constants";
 import {useProfileStore} from "@/stores/profile-store";
 import {RECOMMENDATION_STATE_PENDING} from "@/constants/project-constants";
 
-const Recommendations = () => {
+interface IRecommendationsProps {
+    displayOnlyAll?: boolean
+}
+
+const Recommendations = (props: IRecommendationsProps) => {
     const { profileData } = useProfileStore((state) => state);
     const { projects, getAllProjects, recommendations, getAllRecommendations, getPostedRecommendations } = useProjectsStore();
     const { openModal } = useModalStore((state) => state);
@@ -45,6 +49,21 @@ const Recommendations = () => {
         updateMyRecommendations(recommendations);
     }, [recommendations]);
 
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show-recommendation');
+                } else {
+                    entry.target.classList.remove('show-recommendation');
+                }
+            })
+        });
+
+        const recommendationElements = document.querySelectorAll('.hidden-recommendation');
+        recommendationElements.forEach((el: Element) => observer.observe(el));
+    }, []);
+
     const getProject = (id: number | number[]): IProject | undefined => {
         if (Array.isArray(id)) {
             return;
@@ -56,73 +75,87 @@ const Recommendations = () => {
     return (
         <div className="recommendations-page fade-in--1s">
             {
-                profileData && isAdmin() ?(
-                    <div className="recommendations-page-my-recommendations">
-                        <div className="header">
-                            <h1>Pending Recommendations</h1>
-                        </div>
-                        <div className="container">
-                            {
-                                myRecommendations.length > 0 ?
-                                    <Masonry columns={{ xs: 1, sm: 3, md: 4 }} spacing={2}>
+                !props.displayOnlyAll ? (
+                    <Fragment>
+                        {
+                            profileData && isAdmin() ?(
+                                <div className="recommendations-page-my-recommendations">
+                                    <div className="header">
+                                        <h1>Pending Recommendations</h1>
+                                    </div>
+                                    <div className="container">
                                         {
-                                            myRecommendations.map((recommendation: IRecommendation) => {
-                                                return (
-                                                    <Recommendation
-                                                        key={recommendation.id}
-                                                        {...recommendation}
-                                                        projectName={getProject(recommendation.projectId || 0)?.name}
-                                                        projectPosition={recommendation.positionAtTheTime}
-                                                        displayState
-                                                    />
-                                                )
-                                            })
+                                            myRecommendations.length > 0 ?
+                                                <Masonry columns={{ xs: 1, sm: 3, md: 4 }} spacing={2}>
+                                                    {
+                                                        myRecommendations.map((recommendation: IRecommendation) => {
+                                                            return (
+                                                                <div
+                                                                    key={`pending-recommendation-${recommendation.id || 0}`}
+                                                                    // className="hidden-recommendation"
+                                                                >
+                                                                    <Recommendation
+                                                                        {...recommendation}
+                                                                        projectName={getProject(recommendation.projectId || 0)?.name}
+                                                                        projectPosition={recommendation.positionAtTheTime}
+                                                                        displayState
+                                                                    />
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
+                                                </Masonry> :
+                                                <h3>No recommendations are pending.</h3>
                                         }
-                                    </Masonry> :
-                                    <h3>No recommendations are pending.</h3>
-                            }
-                        </div>
-                    </div>
-                ) : null
-            }
+                                    </div>
+                                </div>
+                            ) : null
+                        }
 
-            {
-                profileData && !isAdmin() ?(
-                    <div className="recommendations-page-my-recommendations">
-                        <div className="header">
-                            <h1>My Recommendations</h1>
-                            <Button
-                                variant={"contained"}
-                                onClick={() => openModal(MODAL_TYPE_ADD_RECOMMENDATION)}
-                                sx={{
-                                    backgroundColor: red[700],
-                                }}
-                            >
-                                <Add/> Recommend
-                            </Button>
-                        </div>
-                        <div className="container">
-                            {
-                                myRecommendations.length > 0 ?
-                                    <Masonry columns={{ xs: 1, sm: 3, md: 4 }} spacing={2}>
+                        {
+                            profileData && !isAdmin() ?(
+                                <div className="recommendations-page-my-recommendations">
+                                    <div className="header">
+                                        <h1>My Recommendations</h1>
+                                        <Button
+                                            variant={"contained"}
+                                            onClick={() => openModal(MODAL_TYPE_ADD_RECOMMENDATION)}
+                                            sx={{
+                                                backgroundColor: red[700],
+                                            }}
+                                        >
+                                            <Add/> Recommend
+                                        </Button>
+                                    </div>
+                                    <div className="container">
                                         {
-                                            myRecommendations.map((recommendation: IRecommendation) => {
-                                                return (
-                                                    <Recommendation
-                                                        key={recommendation.id}
-                                                        {...recommendation}
-                                                        projectName={getProject(recommendation.projectId || 0)?.name}
-                                                        projectPosition={recommendation.positionAtTheTime}
-                                                        displayState
-                                                    />
-                                                )
-                                            })
+                                            myRecommendations.length > 0 ?
+                                                <Masonry columns={{ xs: 1, sm: 3, md: 4 }} spacing={2}>
+                                                    {
+                                                        myRecommendations.map((recommendation: IRecommendation) => {
+                                                            return (
+                                                                <div
+                                                                    key={`my-recommendation-${recommendation.id || 0}`}
+                                                                    // className="hidden-recommendation"
+                                                                >
+                                                                    <Recommendation
+                                                                        {...recommendation}
+                                                                        projectName={getProject(recommendation.projectId || 0)?.name}
+                                                                        projectPosition={recommendation.positionAtTheTime}
+                                                                        displayState
+                                                                    />
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
+                                                </Masonry> :
+                                                <h3>No recommendations yet. Maybe add one?</h3>
                                         }
-                                    </Masonry> :
-                                    <h3>No recommendations yet. Maybe add one?</h3>
-                            }
-                        </div>
-                    </div>
+                                    </div>
+                                </div>
+                            ) : null
+                        }
+                    </Fragment>
                 ) : null
             }
 
@@ -135,12 +168,13 @@ const Recommendations = () => {
                         {
                             getPostedRecommendations().map((recommendation: IRecommendation) => {
                                 return (
-                                    <Recommendation
-                                        key={recommendation.id}
-                                        {...recommendation}
-                                        projectName={getProject(recommendation.projectId || 0)?.name}
-                                        projectPosition={recommendation.positionAtTheTime}
-                                    />
+                                    <div key={`public-${recommendation.id || 0}`} className="hidden-recommendation">
+                                        <Recommendation
+                                            {...recommendation}
+                                            projectName={getProject(recommendation.projectId || 0)?.name}
+                                            projectPosition={recommendation.positionAtTheTime}
+                                        />
+                                    </div>
                                 )
                             })
                         }

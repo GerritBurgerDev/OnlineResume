@@ -139,7 +139,7 @@ const Navbar = () => {
                                         }}
                                     >
                                         <img
-                                            src={'/svgs/google.svg'}
+                                            src={'/svgs/icons/google.svg'}
                                             alt="sign-in-icon"
                                             style={{ width: '18px', height: '18px' }}
                                         />

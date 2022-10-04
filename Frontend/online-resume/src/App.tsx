@@ -37,8 +37,8 @@ function App() {
       element: <Recommendations />
     },
     {
-      path: "/about-me",
-      element: <div>About Me Section</div>
+      // path: "/about-me",
+      // element: <div>About Me Section</div>
     }
   ]);
 
@@ -64,10 +64,12 @@ function App() {
 
   return (
     <div className="app-container">
+      <div className="wave header-layer"></div>
       <Navbar />
       <div className="page-content">
         <RouterProvider router={router} />
       </div>
+      <div className="bottom-peaks peaks-layer"></div>
       <GlobalModalWrapper />
       <NotificationWrapper />
     </div>
