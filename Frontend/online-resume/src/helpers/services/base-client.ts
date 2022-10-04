@@ -29,7 +29,7 @@ export class BaseClient implements IBaseClient {
     constructor(apiConfig: ApiConfig | undefined) {
         // TODO: I need to make this better.
         if (!window.location.href.includes('localhost')) {
-            this.BASE_URL = 'http://35.179.75.211:8081';
+            this.BASE_URL = 'https://z29z5k6hm4.execute-api.eu-west-2.amazonaws.com/prod';
         } else {
             this.BASE_URL = 'http://localhost:8081/';
         }
