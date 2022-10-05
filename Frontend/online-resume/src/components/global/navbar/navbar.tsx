@@ -158,6 +158,7 @@ const Navbar = () => {
                                 onFailure={onLoginFailure}
                                 cookiePolicy={'single_host_origin'}
                                 isSignedIn={true}
+                                redirectUri="https://env-prod.d1avb0a17o43q.amplifyapp.com/"
                             />}
                     </div>
 
