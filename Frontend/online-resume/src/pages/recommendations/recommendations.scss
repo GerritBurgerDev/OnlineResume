@@ -1,6 +1,8 @@
 @import "@/assets/css/colors.scss";
 
 .recommendations-page {
+  width: 100%;
+  align-self: flex-start;
   display: flex;
   flex-direction: column;
   row-gap: 20px;
