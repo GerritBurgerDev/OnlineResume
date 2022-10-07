@@ -1,5 +1,7 @@
 /* eslint-disable */
 import {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
+import {useProfileStore} from "@/stores/profile-store";
+import {updateAuthToken} from "@/helpers/services/services";
 
 const sanitizeResponse = (object: any, key: string) => {
     if (!object || (typeof object !== 'object' || Array.isArray(object))) {
@@ -21,8 +23,6 @@ const sanitizeResponse = (object: any, key: string) => {
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
     // TODO: Do this when we have authing
-    // config.headers['Authorization'] = `Bearer ${token}`;
-
     return config;
 }
 

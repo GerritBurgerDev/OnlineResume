@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import "./home.scss";
 import IconCard from "@/components/util/icon-card/icon-card";
-import {Tooltip, Icon, Rating} from "@mui/material";
+import {Tooltip, Icon, Rating, CircularProgress} from "@mui/material";
 import {orange} from "@mui/material/colors";
 import {TechSkill} from "@/interfaces/global-interfaces";
 import {SELECTED_SKILL_ALL} from "@/constants/global-constants";
@@ -17,7 +17,12 @@ import Recommendations from "@/pages/recommendations/recommendations";
 
 const Home = () => {
     const { commonDataLoading, techSkills, getCommonData } = useCommonStore((state) => state);
-    const { loadingProjectForSkill, projectsForSkill, getProjectsForSkill } = useProjectsStore((state) => state);
+    const {
+        loadingProjectForSkill,
+        projectsForSkill,
+        getProjectsForSkill,
+        loadingAllRecommendations
+    } = useProjectsStore((state) => state);
 
     const [selectedSkill, setSelectedSkill] = useState<TechSkill>(SELECTED_SKILL_ALL);
     const [switchSkill, setSwitchSkill] = useState<string>('');
@@ -160,21 +165,31 @@ const Home = () => {
 
                 <div className="content-container">
                     {
-                        selectedSkill.name !== SELECTED_SKILL_ALL.name ? renderSpecificSkill() : (
-                            <table className="tech-table fade-in--0_4s">
-                                <tbody>
-                                <tr className="headings">
-                                    <th>Technology</th>
-                                    <th>Type</th>
-                                    <th>Projects</th>
-                                    <th>Experience</th>
-                                    <th>Confidence</th>
-                                </tr>
+                        commonDataLoading ? (
+                            <Fragment>
+                                <CircularProgress size="100px" thickness={1.5}/>
+                            </Fragment>
+                        ) : (
+                            <Fragment>
                                 {
-                                    renderTechSkills()
+                                    selectedSkill.name !== SELECTED_SKILL_ALL.name ? renderSpecificSkill() : (
+                                        <table className="tech-table fade-in--0_4s">
+                                            <tbody>
+                                            <tr className="headings">
+                                                <th>Technology</th>
+                                                <th>Type</th>
+                                                <th>Projects</th>
+                                                <th>Experience</th>
+                                                <th>Confidence</th>
+                                            </tr>
+                                            {
+                                                renderTechSkills()
+                                            }
+                                            </tbody>
+                                        </table>
+                                    )
                                 }
-                                </tbody>
-                            </table>
+                            </Fragment>
                         )
                     }
                 </div>

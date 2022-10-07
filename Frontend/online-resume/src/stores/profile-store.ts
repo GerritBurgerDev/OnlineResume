@@ -28,8 +28,6 @@ export const useProfileStore = create<IProfileStore>(
         (set) => ({
             profileData: null,
             setProfileData: async (data: IProfile | null) => {
-                updateAuthToken(data?.accessToken || '');
-
                 let result: IProfileResponse | undefined;
                 if (data) {
                     try {

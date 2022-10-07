@@ -11,6 +11,8 @@ import {useModalStore} from "@/stores/modal-store";
 import {MODAL_TYPE_ADD_RECOMMENDATION} from "@/constants/modal-constants";
 import {useProfileStore} from "@/stores/profile-store";
 import {RECOMMENDATION_STATE_PENDING} from "@/constants/project-constants";
+import {useLocation} from "react-router-dom";
+import {LOCATION} from "@/constants/global-constants";
 
 interface IRecommendationsProps {
     displayOnlyAll?: boolean
@@ -39,9 +41,14 @@ const Recommendations = (props: IRecommendationsProps) => {
         }
     }
 
+    const location = useLocation();
+
     useEffect(() => {
         getAllProjects().catch(() => { /* Called */ });
-        getAllRecommendations().catch(() => { /* Called */ });
+
+        if (location.pathname === LOCATION.recommendations) {
+            getAllRecommendations().catch(() => { /* Called */ });
+        }
 
     }, [profileData]);
 
@@ -58,6 +65,9 @@ const Recommendations = (props: IRecommendationsProps) => {
                     entry.target.classList.remove('show-recommendation');
                 }
             })
+        }, {
+            rootMargin: "50%",
+            threshold: 0.1
         });
 
         const recommendationElements = document.querySelectorAll('.hidden-recommendation');
