@@ -1,9 +1,10 @@
 import create, {StateCreator} from "zustand";
 import {IProject, IRecommendation} from "@/interfaces/project-interfaces";
-import {projectClientService} from "@/helpers/services/services";
+import {projectClientService, updateAuthToken} from "@/helpers/services/services";
 import {persist, PersistOptions} from "zustand/middleware";
 import {RECOMMENDATION_STATE_POSTED} from "@/constants/project-constants";
 import {IClientMessageResponse} from "@/interfaces/client.interface";
+import {useProfileStore} from "@/stores/profile-store";
 
 interface IProjectStore {
     // Data
@@ -85,6 +86,9 @@ export const useProjectsStore = create<IProjectStore>(
               return await projectClientService.getRecommendationsForProject(projectId);
             },
             addRecommendation: async (data: IRecommendation) => {
+                const profileData = useProfileStore.getState().profileData;
+                updateAuthToken(profileData?.accessToken || '');
+
                 if (Array.isArray(data.projectId)) {
                     let response;
                     for (let i = 0; i < data.projectId.length; i++) {
@@ -102,13 +106,31 @@ export const useProjectsStore = create<IProjectStore>(
                     return response;
                 }
 
-                return await projectClientService.addRecommendation(data);
+                const result = await projectClientService.addRecommendation(data);
+
+                updateAuthToken('');
+
+                return result;
             },
             updateRecommendationState: async (data: IRecommendation) => {
-              return await projectClientService.updateRecommendationState(data);
+                const profileData = useProfileStore.getState().profileData;
+                updateAuthToken(profileData?.accessToken || '');
+
+                const result = await projectClientService.updateRecommendationState(data);
+
+                updateAuthToken('');
+
+                return result;
             },
             removeRecommendation: async (id: number) => {
-                return await projectClientService.removeRecommendation(id);
+                const profileData = useProfileStore.getState().profileData;
+                updateAuthToken(profileData?.accessToken || '');
+
+                const result = await projectClientService.removeRecommendation(id);
+
+                updateAuthToken('');
+
+                return result
             },
 
             // Getters
