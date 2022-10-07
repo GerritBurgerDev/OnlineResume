@@ -11,8 +11,6 @@ import {useModalStore} from "@/stores/modal-store";
 import {MODAL_TYPE_ADD_RECOMMENDATION} from "@/constants/modal-constants";
 import {useProfileStore} from "@/stores/profile-store";
 import {RECOMMENDATION_STATE_PENDING} from "@/constants/project-constants";
-import {useLocation} from "react-router-dom";
-import {LOCATION} from "@/constants/global-constants";
 
 interface IRecommendationsProps {
     displayOnlyAll?: boolean
@@ -41,14 +39,9 @@ const Recommendations = (props: IRecommendationsProps) => {
         }
     }
 
-    const location = useLocation();
-
     useEffect(() => {
         getAllProjects().catch(() => { /* Called */ });
-
-        if (location.pathname === LOCATION.recommendations) {
-            getAllRecommendations().catch(() => { /* Called */ });
-        }
+        getAllRecommendations().catch(() => { /* Called */ });
 
     }, [profileData]);
 
