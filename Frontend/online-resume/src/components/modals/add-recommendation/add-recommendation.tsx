@@ -155,6 +155,8 @@ const AddRecommendation = (props: IAddRecommendationProps) => {
             closeModal();
         }).catch((error) => {
             const err = error as AxiosError;
+            console.log(err);
+
             const message = (err.response?.data as IClientMessageResponse).message;
 
             openNotification({

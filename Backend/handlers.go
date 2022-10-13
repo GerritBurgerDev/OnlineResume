@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"gopkg.in/validator.v2"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 // GetAllRecommendations is a GET method
@@ -223,22 +223,7 @@ func GetProjectsForSkill(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	skill, _ := vars["skill"]
 
-	opt := bson.M{
-		"filters": []bson.M{
-			{
-				"stack": bson.M{
-					"$in": []primitive.Regex{
-						{
-							Pattern: fmt.Sprintf("^%s$", skill),
-							Options: "i",
-						},
-					},
-				},
-			},
-		},
-	}
-
-	result := Helpers.GetFromCollection(client, "OnlineResume", "Projects", opt)
+	result := Helpers.GetProjectsForSkill(client, skill)
 
 	json.NewEncoder(writer).Encode(result)
 }
@@ -263,6 +248,25 @@ func GetAllProjects(writer http.ResponseWriter, request *http.Request) {
 // returns global data object
 func GetCommonData(writer http.ResponseWriter, request *http.Request) {
 	result := Helpers.GetFromCollection(client, "OnlineResume", "GlobalData")
+
+	var skills map[string]Structs.TechSkill
+	bsonBytes, _ := bson.Marshal(result[0]["techSkills"])
+	bson.Unmarshal(bsonBytes, &skills)
+
+	for _, skill := range skills {
+		projectsResult := Helpers.GetProjectsForSkill(client, skill.Name)
+
+		projects := make([]string, 0)
+		for _, proj := range projectsResult {
+			project := fmt.Sprintf("%v", proj["name"])
+			projects = append(projects, project)
+		}
+
+		skill.Projects = projects
+		skills[strings.ToLower(skill.Name)] = skill
+	}
+
+	result[0]["techSkills"] = skills
 
 	json.NewEncoder(writer).Encode(result[0])
 }

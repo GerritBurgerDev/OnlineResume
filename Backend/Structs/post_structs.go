@@ -27,3 +27,23 @@ type MongoOptions struct {
 	sort    string
 	filters []string
 }
+
+type TechSkill struct {
+	Name       string   `bson:"name"`
+	Icon       string   `bson:"icon"`
+	Confidence float64  `bson:"confidence"`
+	About      string   `bson:"about"`
+	Projects   []string `bson:"projects"`
+	Type       string   `bson:"type"`
+}
+
+type Project struct {
+	Id int64 `bson:"id"`
+	Employer string `bson:"employer"`
+	StartDate float64 `bson:"startDate"`
+	EndDate string `bson:"endDate"`
+	Name string `bson:"name"`
+	Position string `bson:"position"`
+	Responsibilities []string `bson:"responsibilities"`
+	Stack []string `bson:"stack"`
+}

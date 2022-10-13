@@ -20,8 +20,7 @@ const Home = () => {
     const {
         loadingProjectForSkill,
         projectsForSkill,
-        getProjectsForSkill,
-        loadingAllRecommendations
+        getProjectsForSkill
     } = useProjectsStore((state) => state);
 
     const [selectedSkill, setSelectedSkill] = useState<TechSkill>(SELECTED_SKILL_ALL);
@@ -54,7 +53,7 @@ const Home = () => {
         }
 
         fetchCommonData().catch(() => { /* DONE */ });
-    }, [getCommonData]);
+    }, []);
 
     useEffect(() => {
         const fetchProjectsForSkill = async () => {
