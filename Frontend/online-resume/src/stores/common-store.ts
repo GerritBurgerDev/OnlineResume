@@ -26,8 +26,6 @@ export const useCommonStore = create<ICommonStore>((set) => ({
 
         const data = await globalServiceClient.getCommonData();
 
-        console.log(data);
-
         if (data?.techSkills) {
             Object.entries(data.techSkills).map(entry => {
                 data.techSkills[entry[0]] = _.mapKeys(entry[1], (v, k) => _.camelCase(k))

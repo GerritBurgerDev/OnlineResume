@@ -2,7 +2,7 @@ import IconCard from "@/components/util/icon-card/icon-card";
 import "./specific-skill.scss";
 import {getTimePassed} from "@/helpers/date-helper";
 import CircularProgressBar from "@/components/util/progress/circular-progress-bar";
-import React from "react";
+import React, {useEffect} from "react";
 import {TechSkill} from "@/interfaces/global-interfaces";
 import {IProject} from "@/interfaces/project-interfaces";
 import {useProfileStore} from "@/stores/profile-store";
@@ -28,7 +28,11 @@ const SpecificSkill = (props: ISpecificSkillProps) => {
         return 'Fluent';
     }
 
-    const getExperienceValue = (experience: string): number => {
+    const getExperienceValue = (experience: string): number | undefined => {
+        if (!experience) {
+            return;
+        }
+
         const years = experience.match(/\d+(\syear(s?))/gi)?.at(0)?.match(/\d+/gi)?.at(0) || 0;
         let months = experience.match(/\d+(\smonth(s?))/gi)?.at(0)?.match(/\d+/gi)?.at(0) || 0 ;
 
@@ -103,7 +107,7 @@ const SpecificSkill = (props: ISpecificSkillProps) => {
                                 value={getExperienceValue(props.selectedSkill.experienceDuration)}
                                 thickness={2.5}
                                 icon="schedule"
-                                label={calculateProficiency(getExperienceValue(props.selectedSkill.experienceDuration))}
+                                label={calculateProficiency(getExperienceValue(props.selectedSkill.experienceDuration) || 0)}
                                 labelSize={18}
                             />
                         </div>

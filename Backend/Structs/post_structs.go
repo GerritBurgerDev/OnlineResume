@@ -34,6 +34,7 @@ type TechSkill struct {
 	Confidence float64  `bson:"confidence"`
 	About      string   `bson:"about"`
 	Projects   []string `bson:"projects"`
+	ExperienceDuration string `bson:"experienceDuration"`
 	Type       string   `bson:"type"`
 }
 

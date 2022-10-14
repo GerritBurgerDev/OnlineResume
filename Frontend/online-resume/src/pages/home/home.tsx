@@ -101,9 +101,6 @@ const Home = () => {
                             <Rating
                                 name="simple-controlled"
                                 value={skill.confidence}
-                                // onChange={(event: SyntheticEvent, newValue: number | null) => {
-                                //     // updateSkill(skill.name, 'confidence', newValue)
-                                // }}
                                 precision={0.5}
                                 readOnly
                             />
